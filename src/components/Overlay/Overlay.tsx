@@ -1,48 +1,64 @@
 import React from 'react';
-import { getCurrentSite, getSites } from '../../services/siteService';
+import { addSiteToBlockListType, deleteSiteFromBlockListType } from '../../constants';
+import { getSites } from '../../services/siteService';
+import { getHostnameFromUrl } from '../../utils';
 
-import './Overlay.css'
+import './Overlay.css';
 
-// function init(onShowOverlay: () => void) {
-//   chrome.runtime.onMessage.addListener(
-//     (request: RequestChromeContentListener, _, sendResponse) => {
-//       if (request.message === 'show_overlay') {
-//         onShowOverlay();
-//       }
-//       sendResponse(true);
-//     }
-//   );
-// };
-
-function Overlay() {
+const Overlay = () => {
   const [showOverlay, setShowOverlay] = React.useState<boolean>(false);
   const [blockedSites, setBlockedSites] = React.useState<string[]>([]);
-  
+
+  React.useEffect(() => {
+    chrome.runtime.onMessage.addListener((...args) => {
+      const urlToAdd = args.find((x) => x.type === addSiteToBlockListType)?.url;
+      const siteToDelete = args.find((x) => x.type === deleteSiteFromBlockListType)?.site;
+
+      console.log(urlToAdd, siteToDelete);
+
+      if (Boolean(urlToAdd)) {
+        setBlockedSites((prev) => {
+          return [...prev, getHostnameFromUrl(urlToAdd)];
+        });
+      }
+
+      if (Boolean(siteToDelete)) {
+        setBlockedSites((prev) => {
+          return prev.filter((x) => x !== siteToDelete);
+        });
+
+        if (
+          !blockedSites
+            .filter((x) => x !== siteToDelete)
+            .includes(new URL(location?.href || '').hostname)
+        ) {
+          setShowOverlay(false);
+        }
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   React.useEffect(() => {
     getSites(setBlockedSites);
   }, []);
 
   React.useEffect(() => {
-    console.log(location.href);
-    console.log(blockedSites, new URL(location.href || '').hostname);
-
     if (blockedSites.includes(new URL(location.href || '').hostname)) {
       setShowOverlay(true);
       document.getElementsByTagName('body')[0].style.overflow = 'hidden';
     }
   }, [blockedSites]);
 
-  console.log('showing overlay', showOverlay);
-
-  if(!showOverlay) {
+  if (!showOverlay) {
     return null;
   }
-  
+
   return (
-    <div className="overlay">
-      <h1 className="text">Stay Focused 👨‍💻</h1>
+    <div className='overlay'>
+      <h1 className='text'>Stay Focused 👨‍💻</h1>
     </div>
   );
-}
+};
 
-export { Overlay }
+export { Overlay };

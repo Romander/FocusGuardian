@@ -1,74 +1,95 @@
-import React from 'react';
-import { addSite, deleteSite, getCurrentSite, getSites } from '../../services/siteService';
+import React from "react";
+import {
+	addSite,
+	deleteSite,
+	getCurrentSite,
+	getSites,
+} from "../../services/siteService";
+import githubIcon from "../../icons/github.svg";
+import {
+	addSiteToBlockListType,
+	deleteSiteFromBlockListType,
+} from "../../constants";
+import { getHostnameFromUrl } from "../../utils";
 
-import './App.css';
+import "./App.css";
 
-// async function init(sitesToBlock: string[], onGetCurrentTab: (tab: chrome.tabs.Tab) => void): Promise<void> {
-//   return new Promise<void>((resolve, reject) => {
-//       chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-//           if(tabs.length === 0) {
-//             reject("No tabs!");
-//           };
+const App = () => {
+	const [tab, setTab] = React.useState<chrome.tabs.Tab>();
+	const [blockedSites, setBlockedSites] = React.useState<string[]>([]);
 
-//           onGetCurrentTab(tabs[0]);
+	React.useEffect(() => {
+		getSites(setBlockedSites);
+		getCurrentSite((tab) => {
+			setTab(tab);
+		});
+	}, []);
 
-//           if (!sitesToBlock.includes(new URL(tabs[0].url || '').hostname)) {
-//             chrome.tabs.sendMessage(tabs[0].id!, {
-//               message: 'show_overlay'
-//             } as RequestChromeContentListener,
-            
-//             (response) => {
-//                 if(!response) {
-//                     reject("Something went wrong!");
-//                 }
-//                 console.log("Got response");
-//                 console.log(response);
-//                 resolve();
-//             });
-//           }
-//       });
-//   });
-// };
+	const handleAddSiteToBlockList = React.useCallback(async () => {
+		addSite(tab?.url?.toString() ?? "", setBlockedSites);
 
-function App() {
-  const [url, setUrl] = React.useState<string | undefined>(undefined);
-  const [blockedSites, setBlockedSites] = React.useState<string[]>([]);
+		if (
+			!blockedSites.includes(
+				getHostnameFromUrl(tab?.url?.toString() || "")
+			)
+		) {
+			await chrome.tabs.sendMessage(tab?.id as number, {
+				type: addSiteToBlockListType,
+				url: tab?.url?.toString(),
+			});
+		}
+	}, [tab]);
 
-  React.useEffect(() => {
-    getSites(setBlockedSites);
-    getCurrentSite((tab) => { setUrl(tab.url); })
-  }, []);
+	const handleRemoveSiteFromBlockList = React.useCallback(
+		async (site: string) => {
+			deleteSite(site, setBlockedSites);
 
-  const handleAddSiteToBlockList = React.useCallback(() => {
-    addSite(url?.toString() || '', setBlockedSites);
-  }, [url]);
+			await chrome.tabs.sendMessage(tab?.id as number, {
+				type: deleteSiteFromBlockListType,
+				site: getHostnameFromUrl(tab?.url?.toString() || ""),
+			});
+		},
+		[tab]
+	);
 
-  const handleRemoveSiteFromBlockList = React.useCallback((site: string) => {
-    deleteSite(site, setBlockedSites);
-  }, []);
-
-  return (
-    <div className="App">
-      <div className='site'>
-        <div className='site-name' title={url}>
-          {url}
-        </div>
-        <button onClick={handleAddSiteToBlockList}>✅</button>
-      </div>
-      {
-        blockedSites.map((site, idx) => {
-          return (
-            <div key={idx} className='site'>
-              <div className='site-name'>
-                {site}
-              </div>
-              <button onClick={() => handleRemoveSiteFromBlockList(site)}>❌</button>
-             </div>
-          )
-        })
-      }
-    </div>
-  );
+	return (
+		<div className="app">
+			<div className="site">
+				<div className="site-name" title={tab?.url}>
+					{tab?.url}
+				</div>
+				<button className="button" onClick={handleAddSiteToBlockList}>
+					✅
+				</button>
+			</div>
+			<div className="blocked-site-list">
+				{blockedSites.map((site, idx) => {
+					return (
+						<div key={idx} className="site">
+							<div className="site-name">{site}</div>
+							<button
+								className="button"
+								onClick={async () =>
+									await handleRemoveSiteFromBlockList(site)
+								}
+							>
+								❌
+							</button>
+						</div>
+					);
+				})}
+			</div>
+			<footer className="footer">
+				<a
+					href="https://github.com/Romander"
+					target="_blank"
+					rel="noreferrer"
+				>
+					<img src={chrome.runtime.getURL(githubIcon)} alt="GitHub" />
+				</a>
+			</footer>
+		</div>
+	);
 }
 
-export { App }
+export { App };

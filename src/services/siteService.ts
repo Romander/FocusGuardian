@@ -1,3 +1,5 @@
+import { getHostnameFromUrl } from '../utils';
+
 export const getSites = (success: (sites: string[]) => void): void => {
   chrome.storage.sync.get(['sitesToBlock'], (result) => {
       success(result.sitesToBlock || []);
@@ -11,17 +13,17 @@ export const getCurrentSite = (success: (tab: chrome.tabs.Tab) => void): void =>
     };
 
     success(tabs[0]);
-  }) 
+  })
 };
 
-export const addSite = (site: string, success: (sites: string[]) => void): void => {
+export const addSite = (url: string, success: (sites: string[]) => void): void => {
     chrome.storage.sync.get(['sitesToBlock'], (result) => {
         const sitesToBlock = result.sitesToBlock || [];
   
-        const urlObject = new URL(site || '');
+        const site = getHostnameFromUrl(url);
   
-        if (!sitesToBlock.includes(urlObject.hostname)) {
-          sitesToBlock.push(urlObject.hostname);
+        if (!sitesToBlock.includes(site)) {
+          sitesToBlock.push(site);
         }
   
         chrome.storage.sync.set({sitesToBlock}, () => {

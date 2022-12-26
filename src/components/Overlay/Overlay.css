@@ -8,11 +8,11 @@
     background: mediumpurple;
     pointer-events: all;
     display: flex;
-    align-items: center;
     justify-content: center;
 }
 
 .text {
+    margin-top: 50px;
     color: honeydew;
     font-family: monospace;
 }
