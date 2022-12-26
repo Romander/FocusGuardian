@@ -16,27 +16,22 @@ const Overlay = () => {
 
       console.log(urlToAdd, siteToDelete);
 
-      if (Boolean(urlToAdd)) {
+      if (urlToAdd) {
         setBlockedSites((prev) => {
           return [...prev, getHostnameFromUrl(urlToAdd)];
         });
       }
 
-      if (Boolean(siteToDelete)) {
+      if (siteToDelete) {
         setBlockedSites((prev) => {
           return prev.filter((x) => x !== siteToDelete);
         });
 
-        if (
-          !blockedSites
-            .filter((x) => x !== siteToDelete)
-            .includes(new URL(location?.href || '').hostname)
-        ) {
+        if (!blockedSites.filter((x) => x !== siteToDelete).includes(new URL(location?.href || '').hostname)) {
           setShowOverlay(false);
         }
       }
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   React.useEffect(() => {
@@ -55,8 +50,8 @@ const Overlay = () => {
   }
 
   return (
-    <div className='overlay'>
-      <h1 className='text'>Stay Focused 👨‍💻</h1>
+    <div className="overlay">
+      <h1 className="text">Stay Focused 👨‍💻</h1>
     </div>
   );
 };
