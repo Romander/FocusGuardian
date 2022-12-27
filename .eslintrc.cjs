@@ -1,4 +1,5 @@
 module.exports = {
+  plugins: ['react-hooks'],
   extends: [
     // By extending from a plugin config, we can get recommended rules without having to add them manually.
     'eslint:recommended',
@@ -25,5 +26,7 @@ module.exports = {
   },
   rules: {
     // Add your own rules here to override ones from the extended configs.
+    'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
+    'react-hooks/exhaustive-deps': 'error',
   },
 };
