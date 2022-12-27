@@ -21,8 +21,6 @@ const App = () => {
   const handleAddSiteToBlockList = React.useCallback(async () => {
     addSite(tab?.url?.toString() ?? '', setBlockedSites);
 
-    console.log(blockedSites.includes(getHostnameFromUrl(tab?.url?.toString() || '')));
-
     if (!blockedSites.includes(getHostnameFromUrl(tab?.url?.toString() || ''))) {
       await chrome.tabs.sendMessage(
         tab?.id as number,
@@ -31,8 +29,6 @@ const App = () => {
           url: tab?.url?.toString(),
         } as AddMessage,
       );
-
-      console.log('added site to block list', tab?.url?.toString());
     }
   }, [blockedSites, tab?.id, tab?.url]);
 
@@ -47,8 +43,6 @@ const App = () => {
           site: getHostnameFromUrl(tab?.url?.toString() || ''),
         } as DeleteMessage,
       );
-
-      console.log('removed site from block list', site);
     },
     [tab],
   );

@@ -12,8 +12,6 @@ const Overlay = () => {
 
   React.useEffect(() => {
     const onMessage = (message: AddMessage | DeleteMessage) => {
-      console.log(message);
-
       switch (message.type) {
         case addSiteToBlockListType:
           setBlockedSites((prev) => {
