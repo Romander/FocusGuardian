@@ -3,6 +3,7 @@ import { addSite, deleteSite, getCurrentSite, getSites } from '../../services/si
 import githubIcon from '../../icons/github.svg';
 import { addSiteToBlockListType, deleteSiteFromBlockListType } from '../../constants';
 import { getHostnameFromUrl } from '../../utils';
+import { AddMessage, DeleteMessage } from '../../types';
 
 import './App.css';
 
@@ -20,22 +21,34 @@ const App = () => {
   const handleAddSiteToBlockList = React.useCallback(async () => {
     addSite(tab?.url?.toString() ?? '', setBlockedSites);
 
+    console.log(blockedSites.includes(getHostnameFromUrl(tab?.url?.toString() || '')));
+
     if (!blockedSites.includes(getHostnameFromUrl(tab?.url?.toString() || ''))) {
-      await chrome.tabs.sendMessage(tab?.id as number, {
-        type: addSiteToBlockListType,
-        url: tab?.url?.toString(),
-      });
+      await chrome.tabs.sendMessage(
+        tab?.id as number,
+        {
+          type: addSiteToBlockListType,
+          url: tab?.url?.toString(),
+        } as AddMessage,
+      );
+
+      console.log('added site to block list', tab?.url?.toString());
     }
-  }, [tab]);
+  }, [blockedSites, tab?.id, tab?.url]);
 
   const handleRemoveSiteFromBlockList = React.useCallback(
     async (site: string) => {
       deleteSite(site, setBlockedSites);
 
-      await chrome.tabs.sendMessage(tab?.id as number, {
-        type: deleteSiteFromBlockListType,
-        site: getHostnameFromUrl(tab?.url?.toString() || ''),
-      });
+      await chrome.tabs.sendMessage(
+        tab?.id as number,
+        {
+          type: deleteSiteFromBlockListType,
+          site: getHostnameFromUrl(tab?.url?.toString() || ''),
+        } as DeleteMessage,
+      );
+
+      console.log('removed site from block list', site);
     },
     [tab],
   );

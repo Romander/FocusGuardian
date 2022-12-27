@@ -1,6 +1,7 @@
 import React from 'react';
 import { addSiteToBlockListType, deleteSiteFromBlockListType } from '../../constants';
 import { getSites } from '../../services/siteService';
+import { AddMessage, DeleteMessage } from '../../types';
 import { getHostnameFromUrl } from '../../utils';
 
 import './Overlay.css';
@@ -10,28 +11,41 @@ const Overlay = () => {
   const [blockedSites, setBlockedSites] = React.useState<string[]>([]);
 
   React.useEffect(() => {
-    chrome.runtime.onMessage.addListener((...args) => {
-      const urlToAdd = args.find((x) => x.type === addSiteToBlockListType)?.url;
-      const siteToDelete = args.find((x) => x.type === deleteSiteFromBlockListType)?.site;
+    const onMessage = (message: AddMessage | DeleteMessage) => {
+      console.log(message);
 
-      console.log(urlToAdd, siteToDelete);
+      switch (message.type) {
+        case addSiteToBlockListType:
+          setBlockedSites((prev) => {
+            return [...prev, getHostnameFromUrl((message as AddMessage).url)];
+          });
 
-      if (urlToAdd) {
-        setBlockedSites((prev) => {
-          return [...prev, getHostnameFromUrl(urlToAdd)];
-        });
+          break;
+        case deleteSiteFromBlockListType:
+          setBlockedSites((prev) => {
+            return prev.filter((x) => x !== (message as DeleteMessage).site);
+          });
+
+          if (
+            !blockedSites
+              .filter((x) => x !== (message as DeleteMessage).site)
+              .includes(new URL(location?.href || '').hostname)
+          ) {
+            setShowOverlay(false);
+          }
+
+          break;
+        default:
+          break;
       }
+    };
 
-      if (siteToDelete) {
-        setBlockedSites((prev) => {
-          return prev.filter((x) => x !== siteToDelete);
-        });
+    chrome.runtime.onMessage.addListener(onMessage);
 
-        if (!blockedSites.filter((x) => x !== siteToDelete).includes(new URL(location?.href || '').hostname)) {
-          setShowOverlay(false);
-        }
-      }
-    });
+    return () => {
+      chrome.runtime.onMessage.removeListener(onMessage);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   React.useEffect(() => {
