@@ -51,7 +51,7 @@ const Overlay = () => {
 
   return (
     <div className="overlay">
-      <h1 className="text">Stay Focused 👨‍💻</h1>
+      <div className="text">Stay Focused 👨‍💻</div>
     </div>
   );
 };
