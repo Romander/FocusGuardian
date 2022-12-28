@@ -68,7 +68,12 @@ const Overlay = () => {
   if (showOverlay) {
     return (
       <div className="overlay">
-        <div className="text">Stay Focused 👨‍💻</div>
+        <img
+          className="image"
+          alt="background"
+          src="https://live.staticflickr.com/65535/51943635421_d83259c7b7_k.jpg"
+        />
+        <div className="text">👨‍💻</div>
       </div>
     );
   }

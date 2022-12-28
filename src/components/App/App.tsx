@@ -5,9 +5,9 @@ import { addSiteToBlockListType, deleteSiteFromBlockListType, disableAllType } f
 import { getHostnameFromUrl } from '../../utils';
 import { AddMessage, BlockedSite, DeleteMessage, DisableAllChangeMessage, Settings } from '../../types';
 import { getCurrentTab } from '../../services/tabService';
+import { getSettingsFromStorage, updateSettingsInStorage } from '../../services/settingsStorageService';
 
 import './App.css';
-import { getSettingsFromStorage, updateSettingsInStorage } from '../../services/settingsStorageService';
 
 const App = () => {
   const [tab, setTab] = React.useState<chrome.tabs.Tab>();
