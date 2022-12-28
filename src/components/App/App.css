@@ -2,9 +2,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-  height: 450px;
+  min-height: 300px;
+  max-height: 450px;
+  width: 300px;
+  padding: 5px;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
@@ -21,7 +22,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  max-width: 200px;
+  width: 100%;
+  padding: 5px;
 }
 
 .site-disabled {
@@ -40,6 +42,7 @@
   align-items: center;
   width: 100%;
   height: 100%;
+  overflow: auto;
 }
 
 .button {
@@ -52,6 +55,7 @@
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
+  margin-left: auto;
 }
 .button:hover {
   border-color: #646cff;
@@ -63,8 +67,10 @@
 
 .footer {
   display: flex;
+  flex-direction: column;
   align-items: center;
   height: 50px;
+  margin-top: auto;
 }
 
 .checkbox {

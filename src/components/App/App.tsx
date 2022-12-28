@@ -1,52 +1,71 @@
 import React from 'react';
-import { addSite, deleteSite, getCurrentSite, getSites } from '../../services/siteService';
+import { addSiteToStorage, deleteSiteFromStorage, getSitesFromStorage } from '../../services/siteStorageService';
 import githubIcon from '../../icons/github.svg';
-import { addSiteToBlockListType, deleteSiteFromBlockListType } from '../../constants';
+import { addSiteToBlockListType, deleteSiteFromBlockListType, disableAllType } from '../../constants';
 import { getHostnameFromUrl } from '../../utils';
-import { AddMessage, DeleteMessage } from '../../types';
+import { AddMessage, BlockedSite, DeleteMessage, DisableAllChangeMessage, Settings } from '../../types';
+import { getCurrentTab } from '../../services/tabService';
 
 import './App.css';
+import { getSettingsFromStorage, updateSettingsInStorage } from '../../services/settingsStorageService';
 
 const App = () => {
-  const [disabledAll, setDisabledAll] = React.useState<boolean>(false);
   const [tab, setTab] = React.useState<chrome.tabs.Tab>();
-  const [blockedSites, setBlockedSites] = React.useState<string[]>([]);
+  const [blockedSites, setBlockedSites] = React.useState<BlockedSite[]>([]);
+  const [settings, setSettings] = React.useState<Settings>({ disableAll: false });
 
   React.useEffect(() => {
-    getSites(setBlockedSites);
-    getCurrentSite((tab) => {
+    getSitesFromStorage(setBlockedSites);
+    getSettingsFromStorage(setSettings);
+    getCurrentTab((tab) => {
       setTab(tab);
     });
   }, []);
 
   const handleAddSiteToBlockList = React.useCallback(async () => {
-    addSite(tab?.url?.toString() ?? '', setBlockedSites);
+    const url = tab?.url?.toString() ?? '';
+    const hostname = getHostnameFromUrl(url);
 
-    if (!blockedSites.includes(getHostnameFromUrl(tab?.url?.toString() || ''))) {
+    const siteToBlock: BlockedSite = { url, hostname, tabId: tab?.id ?? -1 };
+
+    addSiteToStorage(siteToBlock, setBlockedSites);
+
+    if (!blockedSites.some((site) => site.hostname === hostname)) {
       await chrome.tabs.sendMessage(
         tab?.id as number,
         {
           type: addSiteToBlockListType,
-          url: tab?.url?.toString(),
+          site: siteToBlock,
         } as AddMessage,
       );
     }
   }, [blockedSites, tab?.id, tab?.url]);
 
-  const handleRemoveSiteFromBlockList = React.useCallback(
-    async (site: string) => {
-      deleteSite(site, setBlockedSites);
+  const handleRemoveSiteFromBlockList = React.useCallback(async (site: BlockedSite) => {
+    deleteSiteFromStorage(site, setBlockedSites);
 
+    await chrome.tabs.sendMessage(
+      site.tabId as number,
+      {
+        type: deleteSiteFromBlockListType,
+        site,
+      } as DeleteMessage,
+    );
+  }, []);
+
+  const handleSetDisabledAll = React.useCallback(async () => {
+    updateSettingsInStorage({ disableAll: !settings.disableAll }, setSettings);
+
+    for (const site of blockedSites) {
       await chrome.tabs.sendMessage(
-        tab?.id as number,
+        site?.tabId as number,
         {
-          type: deleteSiteFromBlockListType,
-          site: getHostnameFromUrl(tab?.url?.toString() || ''),
-        } as DeleteMessage,
+          type: disableAllType,
+          value: !settings.disableAll,
+        } as DisableAllChangeMessage,
       );
-    },
-    [tab],
-  );
+    }
+  }, [blockedSites, settings.disableAll]);
 
   return (
     <div className="app">
@@ -61,8 +80,8 @@ const App = () => {
       <div className="blocked-site-list">
         {blockedSites.map((site, idx) => {
           return (
-            <div key={idx} className={disabledAll ? 'site site-disabled' : 'site'}>
-              <div className="site-name">{site}</div>
+            <div key={idx} className={settings?.disableAll ? 'site site-disabled' : 'site'}>
+              <div className="site-name">{site.hostname}</div>
               <button className="button" onClick={async () => await handleRemoveSiteFromBlockList(site)}>
                 ❌
               </button>
@@ -70,18 +89,18 @@ const App = () => {
           );
         })}
       </div>
-      <div>
-        <div className="checkbox">
-          <input
-            type="checkbox"
-            placeholder="Disable All"
-            checked={disabledAll}
-            onChange={() => setDisabledAll(!disabledAll)}
-          />
-          <div>Disable All</div>
-        </div>
-      </div>
       <footer className="footer">
+        <div>
+          <div className="checkbox">
+            <input
+              type="checkbox"
+              placeholder="Disable All"
+              checked={settings?.disableAll}
+              onChange={handleSetDisabledAll}
+            />
+            <div>Disable All</div>
+          </div>
+        </div>
         <a href="https://github.com/Romander" target="_blank" rel="noreferrer">
           <img src={chrome.runtime.getURL(githubIcon)} alt="GitHub" />
         </a>
