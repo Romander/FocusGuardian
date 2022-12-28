@@ -51,10 +51,8 @@ const Overlay = () => {
   }, []);
 
   React.useEffect(() => {
-    if (blockedSites.includes(new URL(location.href || '').hostname)) {
-      setShowOverlay(true);
-      document.getElementsByTagName('body')[0].style.overflow = 'hidden';
-    }
+    const includes = blockedSites.includes(getHostnameFromUrl(location.href));
+    setShowOverlay(includes);
   }, [blockedSites]);
 
   if (!showOverlay) {

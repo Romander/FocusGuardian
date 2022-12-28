@@ -8,6 +8,7 @@ import { AddMessage, DeleteMessage } from '../../types';
 import './App.css';
 
 const App = () => {
+  const [disabledAll, setDisabledAll] = React.useState<boolean>(false);
   const [tab, setTab] = React.useState<chrome.tabs.Tab>();
   const [blockedSites, setBlockedSites] = React.useState<string[]>([]);
 
@@ -60,7 +61,7 @@ const App = () => {
       <div className="blocked-site-list">
         {blockedSites.map((site, idx) => {
           return (
-            <div key={idx} className="site">
+            <div key={idx} className={disabledAll ? 'site site-disabled' : 'site'}>
               <div className="site-name">{site}</div>
               <button className="button" onClick={async () => await handleRemoveSiteFromBlockList(site)}>
                 ❌
@@ -68,6 +69,17 @@ const App = () => {
             </div>
           );
         })}
+      </div>
+      <div>
+        <div className="checkbox">
+          <input
+            type="checkbox"
+            placeholder="Disable All"
+            checked={disabledAll}
+            onChange={() => setDisabledAll(!disabledAll)}
+          />
+          <div>Disable All</div>
+        </div>
       </div>
       <footer className="footer">
         <a href="https://github.com/Romander" target="_blank" rel="noreferrer">
