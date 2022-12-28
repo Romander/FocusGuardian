@@ -56,16 +56,16 @@ const App = () => {
   const handleSetDisabledAll = React.useCallback(async () => {
     updateSettingsInStorage({ disableAll: !settings.disableAll }, setSettings);
 
-    for (const site of blockedSites) {
+    for (const id of [...blockedSites.map((site) => site.tabId), tab?.id]) {
       await chrome.tabs.sendMessage(
-        site?.tabId as number,
+        id as number,
         {
           type: disableAllType,
           value: !settings.disableAll,
         } as DisableAllChangeMessage,
       );
     }
-  }, [blockedSites, settings.disableAll]);
+  }, [blockedSites, settings.disableAll, tab?.id]);
 
   return (
     <div className="app">
