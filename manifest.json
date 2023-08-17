@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "FocusGuardian",
   "version": "1.0.0",
-  "description": "Guard your focus against distractions! FocusGuardian helps you block distracting sites so you can remain concentrated on what matters most.",
+  "description": "Guard your focus! FocusGuardian helps you block distracting sites so you can remain concentrated on what matters most.",
   "action": {
     "default_popup": "index.html"
   },
@@ -14,9 +14,9 @@
   ],
   "permissions": ["tabs", "storage"],
   "icons": {
-    "16": "icons/icon16.jpeg",
-    "32": "icons/icon32.jpeg",
-    "48": "icons/icon48.jpeg",
-    "128": "icons/icon128.jpeg"
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
   }
 }

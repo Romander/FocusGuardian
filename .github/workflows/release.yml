@@ -3,60 +3,64 @@ name: Create Release and Zip dist
 on:
   push:
     branches:
-      - main  # Using the main branch
+      - main # Using the main branch
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '16'  # Or whatever version you want to specify
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16" # Or whatever version you want to specify
 
-    - name: Install Dependencies
-      run: npm ci
+      - name: Install Dependencies
+        run: npm ci
 
-    # Check if the version has been incremented
-    - name: Check if the version has been incremented
-      run: |
-        git fetch
-        VERSION_CHANGED=$(git diff origin/main -- package.json | grep '"version":')
-        if [ -z "$VERSION_CHANGED" ]; then
-          echo "Error: version in package.json has not been incremented."
-          exit 1
-        fi
+      # Check if the version has been incremented
+      # - name: Check if the version has been incremented
+      #   run: |
+      #     git fetch
+      #     VERSION_CHANGED=$(git diff origin/main -- package.json | grep '"version":')
+      #     if [ -z "$VERSION_CHANGED" ]; then
+      #       echo "Error: version in package.json has not been incremented."
+      #       exit 1
+      #     fi
 
-    # Build your project
-    - name: Build
-      run: npm run build
+      # Build your project
+      - name: Build
+        run: npm run build
 
-    - name: Zip dist folder
-      run: |
-        zip -r FocusGuardian.zip dist/
+      - name: Zip dist folder
+        run: |
+          zip -r FocusGuardian.zip dist/
 
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
+        # Extract version from package.json
+      - name: Get version from package.json
+        id: version
+        run: echo "::set-output name=version::$(node -p "require('./package.json').version")"
 
-    - name: Upload Release Asset
-      id: upload-release-asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./FocusGuardian.zip
-        asset_name: FocusGuardian.zip
-        asset_content_type: application/zip
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version.outputs.version }}
+          release_name: FocusGuardian v${{ steps.version.outputs.version }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./FocusGuardian.zip
+          asset_name: FocusGuardian.zip
+          asset_content_type: application/zip
