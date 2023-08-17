@@ -1,10 +1,17 @@
-import { addSiteToBlockListType, deleteSiteFromBlockListType, disableAllType } from './constants';
+import {
+  addSiteToBlockListType,
+  deleteSiteFromBlockListType,
+  disableAllType,
+} from "./constants";
 
 export type RequestChromeContentListener = {
-  message: 'show_overlay' | undefined;
+  message: "show_overlay" | undefined;
 };
 
-type MessageType = typeof addSiteToBlockListType | typeof deleteSiteFromBlockListType | typeof disableAllType;
+type MessageType =
+  | typeof addSiteToBlockListType
+  | typeof deleteSiteFromBlockListType
+  | typeof disableAllType;
 
 export type BlockedSite = { url: string; hostname: string; tabId: number };
 
