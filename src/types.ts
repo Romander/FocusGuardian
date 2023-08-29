@@ -1,7 +1,7 @@
 import {
   addSiteToBlockListType,
   deleteSiteFromBlockListType,
-  disableAllType,
+  updateSettingsType,
 } from "./constants";
 
 export type RequestChromeContentListener = {
@@ -11,11 +11,16 @@ export type RequestChromeContentListener = {
 type MessageType =
   | typeof addSiteToBlockListType
   | typeof deleteSiteFromBlockListType
-  | typeof disableAllType;
+  | typeof updateSettingsType;
 
 export type BlockedSite = { url: string; hostname: string; tabId: number };
 
-export type Settings = { disableAll: boolean };
+export type Settings = {
+  disableAll: boolean;
+  blockedDays: string[];
+  timeTo: string;
+  timeFrom: string;
+};
 
 export type AddMessage = {
   type: MessageType;
@@ -27,7 +32,7 @@ export type DeleteMessage = {
   site: BlockedSite;
 };
 
-export type DisableAllChangeMessage = {
+export type SettingsChangeMessage = {
   type: MessageType;
-  value: boolean;
+  value: Settings;
 };

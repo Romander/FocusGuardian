@@ -8,27 +8,32 @@ import githubIcon from "../icons/github.svg";
 import {
   addSiteToBlockListType,
   deleteSiteFromBlockListType,
-  disableAllType,
+  updateSettingsType,
 } from "../constants";
 import { getHostnameFromUrl } from "../utils";
 import {
   AddMessage,
   BlockedSite,
   DeleteMessage,
-  DisableAllChangeMessage,
   Settings,
+  SettingsChangeMessage,
 } from "../types";
 import { getCurrentTab } from "../services/tabService";
 import {
   getSettingsFromStorage,
   updateSettingsInStorage,
 } from "../services/settingsStorageService";
+import { WeekdayPicker } from "./WeekdayPicker";
+import { localToUTCTime, utcToLocalTime } from "../utils/timeUtils";
 
 const App = () => {
   const [tab, setTab] = React.useState<chrome.tabs.Tab>();
   const [blockedSites, setBlockedSites] = React.useState<BlockedSite[]>([]);
   const [settings, setSettings] = React.useState<Settings>({
     disableAll: false,
+    blockedDays: [],
+    timeFrom: "",
+    timeTo: "",
   });
 
   React.useEffect(() => {
@@ -60,35 +65,90 @@ const App = () => {
 
   const handleRemoveSiteFromBlockList = React.useCallback(
     async (site: BlockedSite) => {
-      deleteSiteFromStorage(site, setBlockedSites);
+      if (
+        confirm(
+          'Ask yourself: "Is unblocking this site helping me get closer to my goals, or is it merely a momentary distraction that will cost me progress?"'
+        )
+      ) {
+        deleteSiteFromStorage(site, setBlockedSites);
 
-      await chrome.tabs.sendMessage(
-        site.tabId as number,
-        {
-          type: deleteSiteFromBlockListType,
-          site,
-        } as DeleteMessage
-      );
+        await chrome.tabs.sendMessage(
+          site.tabId as number,
+          {
+            type: deleteSiteFromBlockListType,
+            site,
+          } as DeleteMessage
+        );
+      }
     },
     []
   );
 
-  const handleSetDisabledAll = React.useCallback(async () => {
-    updateSettingsInStorage({ disableAll: !settings.disableAll }, setSettings);
+  const sendNewSettingsToAllTabs = React.useCallback(
+    async (newSettings: Partial<Settings>) => {
+      for (const id of [...blockedSites.map((site) => site.tabId), tab?.id]) {
+        await chrome.tabs.sendMessage(
+          id as number,
+          {
+            type: updateSettingsType,
+            value: { ...settings, ...newSettings },
+          } as SettingsChangeMessage
+        );
+      }
+    },
+    [blockedSites, settings, tab?.id]
+  );
 
-    for (const id of [...blockedSites.map((site) => site.tabId), tab?.id]) {
-      await chrome.tabs.sendMessage(
-        id as number,
+  const handleSetTimeTo = React.useCallback(
+    async (timeTo: string) => {
+      updateSettingsInStorage(
         {
-          type: disableAllType,
-          value: !settings.disableAll,
-        } as DisableAllChangeMessage
+          timeTo,
+        },
+        setSettings
       );
-    }
-  }, [blockedSites, settings.disableAll, tab?.id]);
+
+      sendNewSettingsToAllTabs({
+        timeTo,
+      });
+    },
+    [sendNewSettingsToAllTabs]
+  );
+
+  const handleSetTimeFrom = React.useCallback(
+    async (timeFrom: string) => {
+      updateSettingsInStorage(
+        {
+          timeFrom,
+        },
+        setSettings
+      );
+
+      sendNewSettingsToAllTabs({
+        timeFrom,
+      });
+    },
+    [sendNewSettingsToAllTabs]
+  );
+
+  const handleDaysChange = React.useCallback(
+    async (days: string[]) => {
+      updateSettingsInStorage(
+        {
+          blockedDays: days,
+        },
+        setSettings
+      );
+
+      sendNewSettingsToAllTabs({
+        blockedDays: days,
+      });
+    },
+    [sendNewSettingsToAllTabs]
+  );
 
   return (
-    <div className="flex flex-col items-center min-h-[300px] max-h-[450px] w-[300px] bg-[#242424] text-white text-opacity-87 font-sans antialiased leading-[1]">
+    <div className="flex flex-col items-center min-h-[400px] max-h-[550px] w-[300px] bg-[#242424] text-white text-opacity-87 font-sans antialiased leading-[1]">
       <div className="flex items-center justify-center w-full p-2 bg-[#1a1a1a]">
         <div className="truncate" title={tab?.url}>
           {tab?.url}
@@ -138,17 +198,32 @@ const App = () => {
         </div>
       )}
 
+      <WeekdayPicker
+        selectedDays={settings.blockedDays}
+        onChange={handleDaysChange}
+      />
+
+      <div className="flex p-2">
+        <input
+          className="appearance-none text-center p-2 border border-gray-300 rounded shadow-sm bg-white text-black"
+          type="time"
+          value={utcToLocalTime(settings.timeFrom)}
+          onChange={(e) => handleSetTimeFrom(localToUTCTime(e.target.value))}
+        />
+        <input
+          className="appearance-none text-center p-2 border border-gray-300 rounded shadow-sm bg-white text-black"
+          type="time"
+          value={utcToLocalTime(settings.timeTo)}
+          onChange={(e) => handleSetTimeTo(localToUTCTime(e.target.value))}
+        />
+      </div>
+
       <footer className="flex flex-col items-center p-2">
-        <div className="flex items-center mb-2">
-          <input
-            type="checkbox"
-            placeholder="Unblock all"
-            checked={settings?.disableAll}
-            onChange={handleSetDisabledAll}
-          />
-          <div className="ml-1">Unblock All 🧙‍♂️</div>
-        </div>
-        <a href="https://github.com/Romander" target="_blank" rel="noreferrer">
+        <a
+          href="https://github.com/Romander/FocusGuardian"
+          target="_blank"
+          rel="noreferrer"
+        >
           <img src={chrome.runtime.getURL(githubIcon)} alt="GitHub" />
         </a>
       </footer>

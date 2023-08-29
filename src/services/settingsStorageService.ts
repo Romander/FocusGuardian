@@ -9,13 +9,11 @@ export const getSettingsFromStorage = (
 };
 
 export const updateSettingsInStorage = (
-  updateSettings: Settings,
+  updateSettings: Partial<Settings>,
   success: (settings: Settings) => void
 ): void => {
   chrome.storage.sync.get(["settings"], (result) => {
-    const settings: Settings = result.settings || {};
-
-    settings.disableAll = updateSettings.disableAll;
+    const settings: Settings = { ...result.settings, ...updateSettings };
 
     chrome.storage.sync.set({ settings }, () => {
       success(settings);

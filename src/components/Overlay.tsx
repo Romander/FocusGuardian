@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   addSiteToBlockListType,
   deleteSiteFromBlockListType,
-  disableAllType,
+  updateSettingsType,
 } from "../constants";
 import { getSettingsFromStorage } from "../services/settingsStorageService";
 import { getSitesFromStorage } from "../services/siteStorageService";
@@ -10,21 +10,34 @@ import {
   AddMessage,
   BlockedSite,
   DeleteMessage,
-  DisableAllChangeMessage,
+  SettingsChangeMessage,
   Settings,
 } from "../types";
 import { getHostnameFromUrl } from "../utils";
+import quotesData from "../quotes.json";
+import {
+  getAdjustedIntervalDuration,
+  getCurrentTimeInUTC,
+  isWithinTimeRange,
+} from "../utils/timeUtils";
 
 const Overlay = () => {
-  const [showOverlay, setShowOverlay] = React.useState<boolean>(false);
-  const [settings, setSettings] = React.useState<Settings>({
+  const [quote, setQuote] = useState<{
+    source: string;
+    text: string;
+  } | null>(null);
+  const [showOverlay, setShowOverlay] = useState<boolean>(false);
+  const [settings, setSettings] = useState<Settings>({
     disableAll: false,
+    blockedDays: [],
+    timeTo: "",
+    timeFrom: "",
   });
-  const [blockedSites, setBlockedSites] = React.useState<BlockedSite[]>([]);
+  const [blockedSites, setBlockedSites] = useState<BlockedSite[]>([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const onMessage = (
-      message: AddMessage | DeleteMessage | DisableAllChangeMessage
+      message: AddMessage | DeleteMessage | SettingsChangeMessage
     ) => {
       switch (message.type) {
         case addSiteToBlockListType:
@@ -53,12 +66,20 @@ const Overlay = () => {
           }
 
           break;
-        case disableAllType:
+        case updateSettingsType: {
+          const newSettings = (message as SettingsChangeMessage).value;
+
+          if (newSettings?.disableAll) {
+            setShowOverlay(false);
+          }
+
           setSettings((prev) => ({
             ...prev,
-            disableAll: (message as DisableAllChangeMessage).value,
+            ...newSettings,
           }));
+
           break;
+        }
         default:
           break;
       }
@@ -72,55 +93,102 @@ const Overlay = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     getSitesFromStorage(setBlockedSites);
     getSettingsFromStorage(setSettings);
   }, []);
 
-  React.useEffect(() => {
-    const includes = blockedSites.some(
+  useEffect(() => {
+    const today = new Date().getDay().toString();
+    const isTodayBlocked = settings.blockedDays.includes(today);
+    const siteIsBlocked = blockedSites.some(
       (x) => x.hostname === getHostnameFromUrl(location.href)
     );
-    setShowOverlay(includes);
-  }, [blockedSites]);
 
-  React.useEffect(() => {
+    // Check if both conditions - day and time - are met
+    setShowOverlay(
+      siteIsBlocked &&
+        isTodayBlocked &&
+        isWithinTimeRange(
+          getCurrentTimeInUTC(),
+          settings.timeFrom,
+          settings.timeTo
+        ) &&
+        !settings.disableAll
+    );
+  }, [blockedSites, settings]);
+
+  useEffect(() => {
     if (showOverlay) {
       document.body.classList.add("overflow-hidden");
     } else {
       document.body.classList.remove("overflow-hidden");
     }
+  }, [showOverlay]);
 
-    if (settings?.disableAll) {
-      document.body.classList.remove("overflow-hidden");
-    }
-  }, [settings?.disableAll, showOverlay]);
+  useEffect(() => {
+    const randomQuote =
+      quotesData.quotes[Math.floor(Math.random() * quotesData.quotes.length)];
+    setQuote(randomQuote);
+  }, []);
 
-  if (settings?.disableAll) {
+  useEffect(() => {
+    const checkOverlay = () => {
+      console.log(getCurrentTimeInUTC(), settings.timeFrom, settings.timeTo);
+
+      if (
+        !isWithinTimeRange(
+          getCurrentTimeInUTC(),
+          settings.timeFrom,
+          settings.timeTo
+        )
+      ) {
+        setShowOverlay(false);
+      }
+    };
+
+    // When the tab regains focus or becomes visible, check overlay visibility immediately
+    const handleTabChange = () => {
+      if (!document.hidden) {
+        checkOverlay();
+      }
+    };
+
+    window.addEventListener("focus", handleTabChange);
+    window.addEventListener("visibilitychange", handleTabChange);
+
+    const intervalDuration = getAdjustedIntervalDuration(
+      document.hidden,
+      getCurrentTimeInUTC(),
+      settings.timeFrom,
+      settings.timeTo
+    );
+    const intervalId = setInterval(checkOverlay, intervalDuration);
+
+    return () => {
+      clearInterval(intervalId);
+      window.removeEventListener("focus", handleTabChange);
+      window.removeEventListener("visibilitychange", handleTabChange);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [settings.timeFrom, settings.timeTo]);
+
+  if (!showOverlay) {
     return null;
   }
 
-  if (showOverlay) {
-    return (
-      <div className="fixed inset-0 z-[10000] box-border flex items-center justify-center bg-[#1a1a1a]">
-        <div className="z-10 text-4xl mt-12 text-honeydew font-mono text-white text-center">
-          <p>🚫 Woah, traveler!</p>
-          <p>🛡️ The FocusGuardian has spotted a sneaky distraction!</p>
-          <p>
-            This realm is off-limits.{" "}
-            <a
-              className="text-yellow-100"
-              href="https://www.youtube.com/watch?v=ZXsQAXx_ao0"
-            >
-              Stay on the path of focus and productivity!
-            </a>
-          </p>
-        </div>
+  return (
+    <div className="fixed inset-0 z-[10000] box-border flex items-center justify-center bg-[#1a1a1a]">
+      <div className="z-10 text-4xl text-honeydew font-serif text-white text-center">
+        {quote && (
+          <div className="mt-4">
+            <p className="italic">{quote.text}</p>
+            <p className="mt-2 text-xl">- {quote.source}</p>
+          </div>
+        )}
       </div>
-    );
-  }
-
-  return null;
+    </div>
+  );
 };
 
 export { Overlay };
