@@ -3,6 +3,7 @@ import {
   deleteSiteFromBlockListType,
   updateSettingsType,
 } from "./constants";
+import { LangType } from "./types/lang";
 
 export type RequestChromeContentListener = {
   message: "show_overlay" | undefined;
@@ -19,6 +20,7 @@ export type Settings = {
   blockedDays: string[];
   timeTo: string;
   timeFrom: string;
+  langCode: LangType;
 };
 
 export type AddMessage = {

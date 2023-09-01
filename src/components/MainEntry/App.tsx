@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import {
   addSiteToBlockListType,
@@ -23,19 +24,24 @@ import {
   Settings,
   SettingsChangeMessage,
 } from "../../types";
+import { LangType } from "../../types/lang";
 import { getHostnameFromUrl } from "../../utils";
 import { localToUTCTime, utcToLocalTime } from "../../utils/timeUtils";
 import { Button } from "../Common/Button";
+import { LanguageSwitcher } from "../Common/LanguageSwitcher";
 import { TimePicker } from "../Common/TimePicker";
 import { WeekdayPicker } from "../Common/WeekdayPicker";
 
 const App = () => {
+  const { t, i18n } = useTranslation();
+
   const [tab, setTab] = useState<chrome.tabs.Tab>();
   const [blockedSites, setBlockedSites] = useState<BlockedSite[]>([]);
   const [settings, setSettings] = useState<Settings>({
     blockedDays: [],
     timeFrom: "",
     timeTo: "",
+    langCode: i18n.language as "en" | "ru",
   });
 
   useEffect(() => {
@@ -67,11 +73,7 @@ const App = () => {
 
   const handleRemoveSiteFromBlockList = useCallback(
     async (site: BlockedSite) => {
-      if (
-        confirm(
-          'Ask yourself: "Is unblocking this site helping me get closer to my goals, or is it merely a momentary distraction that will cost me progress?"',
-        )
-      ) {
+      if (confirm(t("App/handleRemoveSiteFromBlockList/confirm"))) {
         deleteSiteFromStorage(site, setBlockedSites);
 
         await chrome.tabs.sendMessage(
@@ -83,7 +85,7 @@ const App = () => {
         );
       }
     },
-    [],
+    [t],
   );
 
   const sendNewSettingsToAllTabs = useCallback(
@@ -149,13 +151,32 @@ const App = () => {
     [sendNewSettingsToAllTabs],
   );
 
+  const handleChangeLang = useCallback(
+    async (langCode: LangType) => {
+      updateSettingsInStorage(
+        {
+          langCode,
+        },
+        setSettings,
+      );
+
+      sendNewSettingsToAllTabs({
+        langCode,
+      });
+    },
+    [sendNewSettingsToAllTabs],
+  );
+
   return (
     <div className="flex flex-col items-center min-h-[400px] max-h-[550px] w-[300px] bg-[#242424] text-white text-opacity-87 font-sans antialiased leading-[1]">
       <div className="flex items-center justify-center w-full p-2 bg-[#1a1a1a]">
         <div className="truncate" title={tab?.url}>
           {tab?.url}
         </div>
-        <Button title="Block current site" onClick={handleAddSiteToBlockList}>
+        <Button
+          title={t("App/Button/Block")}
+          onClick={handleAddSiteToBlockList}
+        >
           🔒
         </Button>
       </div>
@@ -169,7 +190,7 @@ const App = () => {
               >
                 <div className="truncate">{site.hostname}</div>
                 <Button
-                  title="Unblock site"
+                  title={t("App/Button/Unblock")}
                   onClick={async () =>
                     await handleRemoveSiteFromBlockList(site)
                   }
@@ -181,13 +202,8 @@ const App = () => {
           })}
         </div>
       ) : (
-        <div className="flex flex-col flex-1 items-center justify-center w-full h-full text-center leading-loose">
-          <p>Greetings, champion of focus! 🌟</p>
-          <p>All realms are open to you for now. </p>
-          <p>
-            Is this a land of distraction you wish the FocusGuardian to guard
-            against?
-          </p>
+        <div className="flex flex-col flex-1 items-center justify-center w-full h-full text-center leading-loose whitespace-pre-line">
+          {t("App/list/empty")}
         </div>
       )}
 
@@ -207,14 +223,19 @@ const App = () => {
         />
       </div>
 
-      <footer className="flex flex-col items-center p-2">
-        <a
-          href="https://github.com/Romander/FocusGuardian"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <img src={chrome.runtime.getURL(githubIcon)} alt="GitHub" />
-        </a>
+      <footer className="flex flex-row items-center p-2 w-full">
+        <div className="flex-[45%]">
+          <LanguageSwitcher onChange={handleChangeLang} />
+        </div>
+        <div className="flex-[55%]">
+          <a
+            href="https://github.com/Romander/FocusGuardian"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <img src={chrome.runtime.getURL(githubIcon)} alt="GitHub" />
+          </a>
+        </div>
       </footer>
     </div>
   );

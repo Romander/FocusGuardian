@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import {
   addSiteToBlockListType,
   deleteSiteFromBlockListType,
   updateSettingsType,
 } from "../../constants";
-import quotesData from "../../quotes.json";
 import { getSettingsFromStorage } from "../../services/settingsStorageService";
 import { getSitesFromStorage } from "../../services/siteStorageService";
 import {
@@ -15,6 +15,7 @@ import {
   Settings,
   SettingsChangeMessage,
 } from "../../types";
+import { LangType } from "../../types/lang";
 import { getHostnameFromUrl } from "../../utils";
 import {
   getAdjustedIntervalDuration,
@@ -23,6 +24,17 @@ import {
 } from "../../utils/timeUtils";
 
 const Overlay = () => {
+  const { t, i18n } = useTranslation();
+
+  const quotes = useMemo(
+    () =>
+      t("quotes", { returnObjects: true }) as {
+        source: string;
+        text: string;
+      }[],
+    [t],
+  );
+
   const [quote, setQuote] = useState<{
     source: string;
     text: string;
@@ -32,6 +44,7 @@ const Overlay = () => {
     blockedDays: [],
     timeTo: "",
     timeFrom: "",
+    langCode: i18n.language as LangType,
   });
   const [blockedSites, setBlockedSites] = useState<BlockedSite[]>([]);
 
@@ -73,6 +86,10 @@ const Overlay = () => {
             ...prev,
             ...newSettings,
           }));
+
+          if (newSettings.langCode) {
+            i18n.changeLanguage(newSettings.langCode);
+          }
 
           break;
         }
@@ -122,10 +139,9 @@ const Overlay = () => {
   }, [showOverlay]);
 
   useEffect(() => {
-    const randomQuote =
-      quotesData.quotes[Math.floor(Math.random() * quotesData.quotes.length)];
+    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
     setQuote(randomQuote);
-  }, []);
+  }, [quotes]);
 
   useEffect(() => {
     const checkOverlay = () => {
