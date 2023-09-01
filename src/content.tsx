@@ -1,16 +1,17 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { Overlay } from "./components/Overlay";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 
+import { Overlay } from "./components/ContentEntry/Overlay";
 import "./index.css";
 
-const root = document.createElement("div");
-root.id = "crx-root";
-root.className = "focus-guardian";
-document.body.append(root);
+const container = document.createElement("div") as HTMLElement;
+container.id = "crx-root";
+container.className = "focus-guardian";
+document.body.append(container);
 
-ReactDOM.createRoot(root).render(
-  <React.StrictMode>
+const root = createRoot(container);
+root.render(
+  <StrictMode>
     <Overlay />
-  </React.StrictMode>
+  </StrictMode>,
 );

@@ -16,7 +16,6 @@ type MessageType =
 export type BlockedSite = { url: string; hostname: string; tabId: number };
 
 export type Settings = {
-  disableAll: boolean;
   blockedDays: string[];
   timeTo: string;
   timeFrom: string;

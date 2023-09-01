@@ -1,42 +1,44 @@
-import React from "react";
-import {
-  addSiteToStorage,
-  deleteSiteFromStorage,
-  getSitesFromStorage,
-} from "../services/siteStorageService";
-import githubIcon from "../icons/github.svg";
+import { useCallback, useEffect, useState } from "react";
+
 import {
   addSiteToBlockListType,
   deleteSiteFromBlockListType,
   updateSettingsType,
-} from "../constants";
-import { getHostnameFromUrl } from "../utils";
+} from "../../constants";
+import githubIcon from "../../icons/github.svg";
+import {
+  getSettingsFromStorage,
+  updateSettingsInStorage,
+} from "../../services/settingsStorageService";
+import {
+  addSiteToStorage,
+  deleteSiteFromStorage,
+  getSitesFromStorage,
+} from "../../services/siteStorageService";
+import { getCurrentTab } from "../../services/tabService";
 import {
   AddMessage,
   BlockedSite,
   DeleteMessage,
   Settings,
   SettingsChangeMessage,
-} from "../types";
-import { getCurrentTab } from "../services/tabService";
-import {
-  getSettingsFromStorage,
-  updateSettingsInStorage,
-} from "../services/settingsStorageService";
-import { WeekdayPicker } from "./WeekdayPicker";
-import { localToUTCTime, utcToLocalTime } from "../utils/timeUtils";
+} from "../../types";
+import { getHostnameFromUrl } from "../../utils";
+import { localToUTCTime, utcToLocalTime } from "../../utils/timeUtils";
+import { Button } from "../Common/Button";
+import { TimePicker } from "../Common/TimePicker";
+import { WeekdayPicker } from "../Common/WeekdayPicker";
 
 const App = () => {
-  const [tab, setTab] = React.useState<chrome.tabs.Tab>();
-  const [blockedSites, setBlockedSites] = React.useState<BlockedSite[]>([]);
-  const [settings, setSettings] = React.useState<Settings>({
-    disableAll: false,
+  const [tab, setTab] = useState<chrome.tabs.Tab>();
+  const [blockedSites, setBlockedSites] = useState<BlockedSite[]>([]);
+  const [settings, setSettings] = useState<Settings>({
     blockedDays: [],
     timeFrom: "",
     timeTo: "",
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     getSitesFromStorage(setBlockedSites);
     getSettingsFromStorage(setSettings);
     getCurrentTab((tab) => {
@@ -44,7 +46,7 @@ const App = () => {
     });
   }, []);
 
-  const handleAddSiteToBlockList = React.useCallback(async () => {
+  const handleAddSiteToBlockList = useCallback(async () => {
     const url = tab?.url?.toString() ?? "";
     const hostname = getHostnameFromUrl(url);
 
@@ -58,16 +60,16 @@ const App = () => {
         {
           type: addSiteToBlockListType,
           site: siteToBlock,
-        } as AddMessage
+        } as AddMessage,
       );
     }
   }, [blockedSites, tab?.id, tab?.url]);
 
-  const handleRemoveSiteFromBlockList = React.useCallback(
+  const handleRemoveSiteFromBlockList = useCallback(
     async (site: BlockedSite) => {
       if (
         confirm(
-          'Ask yourself: "Is unblocking this site helping me get closer to my goals, or is it merely a momentary distraction that will cost me progress?"'
+          'Ask yourself: "Is unblocking this site helping me get closer to my goals, or is it merely a momentary distraction that will cost me progress?"',
         )
       ) {
         deleteSiteFromStorage(site, setBlockedSites);
@@ -77,14 +79,14 @@ const App = () => {
           {
             type: deleteSiteFromBlockListType,
             site,
-          } as DeleteMessage
+          } as DeleteMessage,
         );
       }
     },
-    []
+    [],
   );
 
-  const sendNewSettingsToAllTabs = React.useCallback(
+  const sendNewSettingsToAllTabs = useCallback(
     async (newSettings: Partial<Settings>) => {
       for (const id of [...blockedSites.map((site) => site.tabId), tab?.id]) {
         await chrome.tabs.sendMessage(
@@ -92,59 +94,59 @@ const App = () => {
           {
             type: updateSettingsType,
             value: { ...settings, ...newSettings },
-          } as SettingsChangeMessage
+          } as SettingsChangeMessage,
         );
       }
     },
-    [blockedSites, settings, tab?.id]
+    [blockedSites, settings, tab?.id],
   );
 
-  const handleSetTimeTo = React.useCallback(
+  const handleSetTimeTo = useCallback(
     async (timeTo: string) => {
       updateSettingsInStorage(
         {
           timeTo,
         },
-        setSettings
+        setSettings,
       );
 
       sendNewSettingsToAllTabs({
         timeTo,
       });
     },
-    [sendNewSettingsToAllTabs]
+    [sendNewSettingsToAllTabs],
   );
 
-  const handleSetTimeFrom = React.useCallback(
+  const handleSetTimeFrom = useCallback(
     async (timeFrom: string) => {
       updateSettingsInStorage(
         {
           timeFrom,
         },
-        setSettings
+        setSettings,
       );
 
       sendNewSettingsToAllTabs({
         timeFrom,
       });
     },
-    [sendNewSettingsToAllTabs]
+    [sendNewSettingsToAllTabs],
   );
 
-  const handleDaysChange = React.useCallback(
+  const handleDaysChange = useCallback(
     async (days: string[]) => {
       updateSettingsInStorage(
         {
           blockedDays: days,
         },
-        setSettings
+        setSettings,
       );
 
       sendNewSettingsToAllTabs({
         blockedDays: days,
       });
     },
-    [sendNewSettingsToAllTabs]
+    [sendNewSettingsToAllTabs],
   );
 
   return (
@@ -153,13 +155,9 @@ const App = () => {
         <div className="truncate" title={tab?.url}>
           {tab?.url}
         </div>
-        <button
-          title="Block current site"
-          className="rounded-lg border border-transparent p-2 text-base font-semibold bg-[#1a1a1a] cursor-pointer transition-border duration-200 ease-in ml-auto hover:border-[#646cff] focus:ring focus:ring-webkit-focus-ring-color"
-          onClick={handleAddSiteToBlockList}
-        >
+        <Button title="Block current site" onClick={handleAddSiteToBlockList}>
           🔒
-        </button>
+        </Button>
       </div>
       {blockedSites?.length > 0 ? (
         <div className="flex flex-col flex-1 items-center w-full h-full overflow-auto">
@@ -167,22 +165,17 @@ const App = () => {
             return (
               <div
                 key={idx}
-                className={
-                  settings?.disableAll
-                    ? "flex items-center justify-center w-full p-5 opacity-50"
-                    : "flex items-center justify-center w-full p-5"
-                }
+                className={"flex items-center justify-center w-full p-5"}
               >
                 <div className="truncate">{site.hostname}</div>
-                <button
+                <Button
                   title="Unblock site"
-                  className="rounded-lg border border-transparent p-2 text-base font-semibold bg-[#1a1a1a] cursor-pointer transition-border duration-200 ease-in ml-auto hover:border-[#646cff] focus:ring focus:ring-webkit-focus-ring-color"
                   onClick={async () =>
                     await handleRemoveSiteFromBlockList(site)
                   }
                 >
                   🔓
-                </button>
+                </Button>
               </div>
             );
           })}
@@ -204,15 +197,11 @@ const App = () => {
       />
 
       <div className="flex p-2">
-        <input
-          className="appearance-none text-center p-2 border border-gray-300 rounded shadow-sm bg-white text-black"
-          type="time"
+        <TimePicker
           value={utcToLocalTime(settings.timeFrom)}
           onChange={(e) => handleSetTimeFrom(localToUTCTime(e.target.value))}
         />
-        <input
-          className="appearance-none text-center p-2 border border-gray-300 rounded shadow-sm bg-white text-black"
-          type="time"
+        <TimePicker
           value={utcToLocalTime(settings.timeTo)}
           onChange={(e) => handleSetTimeTo(localToUTCTime(e.target.value))}
         />

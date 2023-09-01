@@ -1,14 +1,15 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { App } from "./components/App";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 
+import { App } from "./components/MainEntry/App";
 import "./index.css";
 
-const root = document.getElementById("root") as HTMLElement;
-root.className = "focus-guardian";
+const container = document.getElementById("root") as HTMLElement;
+container.className = "focus-guardian";
 
-ReactDOM.createRoot(root).render(
-  <React.StrictMode>
+const root = createRoot(container);
+root.render(
+  <StrictMode>
     <App />
-  </React.StrictMode>
+  </StrictMode>,
 );

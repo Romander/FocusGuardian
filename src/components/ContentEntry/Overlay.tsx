@@ -1,25 +1,26 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+
 import {
   addSiteToBlockListType,
   deleteSiteFromBlockListType,
   updateSettingsType,
-} from "../constants";
-import { getSettingsFromStorage } from "../services/settingsStorageService";
-import { getSitesFromStorage } from "../services/siteStorageService";
+} from "../../constants";
+import quotesData from "../../quotes.json";
+import { getSettingsFromStorage } from "../../services/settingsStorageService";
+import { getSitesFromStorage } from "../../services/siteStorageService";
 import {
   AddMessage,
   BlockedSite,
   DeleteMessage,
-  SettingsChangeMessage,
   Settings,
-} from "../types";
-import { getHostnameFromUrl } from "../utils";
-import quotesData from "../quotes.json";
+  SettingsChangeMessage,
+} from "../../types";
+import { getHostnameFromUrl } from "../../utils";
 import {
   getAdjustedIntervalDuration,
   getCurrentTimeInUTC,
   isWithinTimeRange,
-} from "../utils/timeUtils";
+} from "../../utils/timeUtils";
 
 const Overlay = () => {
   const [quote, setQuote] = useState<{
@@ -28,7 +29,6 @@ const Overlay = () => {
   } | null>(null);
   const [showOverlay, setShowOverlay] = useState<boolean>(false);
   const [settings, setSettings] = useState<Settings>({
-    disableAll: false,
     blockedDays: [],
     timeTo: "",
     timeFrom: "",
@@ -37,7 +37,7 @@ const Overlay = () => {
 
   useEffect(() => {
     const onMessage = (
-      message: AddMessage | DeleteMessage | SettingsChangeMessage
+      message: AddMessage | DeleteMessage | SettingsChangeMessage,
     ) => {
       switch (message.type) {
         case addSiteToBlockListType:
@@ -49,17 +49,17 @@ const Overlay = () => {
         case deleteSiteFromBlockListType:
           setBlockedSites((prev) => {
             return prev.filter(
-              (x) => x.hostname !== (message as DeleteMessage).site.hostname
+              (x) => x.hostname !== (message as DeleteMessage).site.hostname,
             );
           });
 
           if (
             !blockedSites
               .filter(
-                (x) => x.hostname !== (message as DeleteMessage).site.hostname
+                (x) => x.hostname !== (message as DeleteMessage).site.hostname,
               )
               .some(
-                (x) => x.hostname === new URL(location?.href || "").hostname
+                (x) => x.hostname === new URL(location?.href || "").hostname,
               )
           ) {
             setShowOverlay(false);
@@ -68,10 +68,6 @@ const Overlay = () => {
           break;
         case updateSettingsType: {
           const newSettings = (message as SettingsChangeMessage).value;
-
-          if (newSettings?.disableAll) {
-            setShowOverlay(false);
-          }
 
           setSettings((prev) => ({
             ...prev,
@@ -102,7 +98,7 @@ const Overlay = () => {
     const today = new Date().getDay().toString();
     const isTodayBlocked = settings.blockedDays.includes(today);
     const siteIsBlocked = blockedSites.some(
-      (x) => x.hostname === getHostnameFromUrl(location.href)
+      (x) => x.hostname === getHostnameFromUrl(location.href),
     );
 
     // Check if both conditions - day and time - are met
@@ -112,9 +108,8 @@ const Overlay = () => {
         isWithinTimeRange(
           getCurrentTimeInUTC(),
           settings.timeFrom,
-          settings.timeTo
-        ) &&
-        !settings.disableAll
+          settings.timeTo,
+        ),
     );
   }, [blockedSites, settings]);
 
@@ -134,13 +129,11 @@ const Overlay = () => {
 
   useEffect(() => {
     const checkOverlay = () => {
-      console.log(getCurrentTimeInUTC(), settings.timeFrom, settings.timeTo);
-
       if (
         !isWithinTimeRange(
           getCurrentTimeInUTC(),
           settings.timeFrom,
-          settings.timeTo
+          settings.timeTo,
         )
       ) {
         setShowOverlay(false);
@@ -161,7 +154,7 @@ const Overlay = () => {
       document.hidden,
       getCurrentTimeInUTC(),
       settings.timeFrom,
-      settings.timeTo
+      settings.timeTo,
     );
     const intervalId = setInterval(checkOverlay, intervalDuration);
 

@@ -1,6 +1,4 @@
-// WeekdayPicker.tsx
-
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 
 type WeekdayPickerProps = {
   selectedDays: string[];
@@ -8,13 +6,13 @@ type WeekdayPickerProps = {
 };
 
 const days = [
-  { label: "Sun", value: "0" },
-  { label: "Mon", value: "1" },
-  { label: "Tue", value: "2" },
-  { label: "Wed", value: "3" },
-  { label: "Thu", value: "4" },
-  { label: "Fri", value: "5" },
-  { label: "Sat", value: "6" },
+  { label: "Sun", value: "0", title: "Sunday" },
+  { label: "Mon", value: "1", title: "Monday" },
+  { label: "Tue", value: "2", title: "Tuesday" },
+  { label: "Wed", value: "3", title: "Wednesday" },
+  { label: "Thu", value: "4", title: "Thursday" },
+  { label: "Fri", value: "5", title: "Friday" },
+  { label: "Sat", value: "6", title: "Saturday" },
 ];
 
 const WeekdayPicker: React.FC<WeekdayPickerProps> = (props) => {
@@ -28,7 +26,7 @@ const WeekdayPicker: React.FC<WeekdayPickerProps> = (props) => {
         onChange([...props.selectedDays, dayValue]);
       }
     },
-    [onChange, props.selectedDays]
+    [onChange, props.selectedDays],
   );
 
   return (
