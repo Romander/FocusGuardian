@@ -168,8 +168,8 @@ const App = () => {
   );
 
   return (
-    <div className="flex flex-col items-center min-h-[400px] max-h-[550px] w-[300px] bg-[#242424] text-white text-opacity-87 font-sans antialiased leading-[1]">
-      <div className="flex items-center justify-center w-full p-2 bg-[#1a1a1a]">
+    <div className="flex flex-col items-center min-h-[400px] max-h-[550px] w-[300px] bg-[#242424] text-white text-opacity-87 font-sans antialiased leading-[1] gap-2">
+      <div className="flex items-center justify-center w-full p-2 bg-[#1a1a1a] shadow-lg">
         <div className="truncate" title={tab?.url}>
           {tab?.url}
         </div>
@@ -186,7 +186,9 @@ const App = () => {
             return (
               <div
                 key={idx}
-                className={"flex items-center justify-center w-full p-5"}
+                className={
+                  "flex items-center justify-center w-full p-2 border-b-2 border-[#1a1a1a]"
+                }
               >
                 <div className="truncate">{site.hostname}</div>
                 <Button
@@ -212,7 +214,7 @@ const App = () => {
         onChange={handleDaysChange}
       />
 
-      <div className="flex p-2">
+      <div className="flex">
         <TimePicker
           value={utcToLocalTime(settings.timeFrom)}
           onChange={(e) => handleSetTimeFrom(localToUTCTime(e.target.value))}
@@ -223,7 +225,7 @@ const App = () => {
         />
       </div>
 
-      <footer className="flex flex-row items-center p-2 w-full">
+      <footer className="flex flex-row items-center w-full">
         <div className="flex-[45%]">
           <LanguageSwitcher onChange={handleChangeLang} />
         </div>

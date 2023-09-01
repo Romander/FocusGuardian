@@ -68,6 +68,7 @@ const WeekdayPicker: React.FC<WeekdayPickerProps> = (props) => {
       {days.map((day) => (
         <button
           key={day.value}
+          title={day.title}
           onClick={() => toggleDay(day.value)}
           className={`w-8 h-8 flex items-center justify-center rounded-full cursor-pointer 
             ${
