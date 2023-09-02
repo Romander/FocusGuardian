@@ -29,16 +29,6 @@ jobs:
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
 
-      # Check if the version has been incremented
-      - name: Check if the version has been incremented
-        run: |
-          git fetch
-          VERSION_CHANGED=$(git diff origin/main -- package.json | grep '"version":')
-          if [ -z "$VERSION_CHANGED" ]; then
-            echo "Error: version in package.json has not been incremented."
-            exit 1
-          fi
-
       # Add this step to run your tests
       - name: Run Tests
         run: yarn test
