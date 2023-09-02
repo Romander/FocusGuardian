@@ -25,6 +25,8 @@ module.exports = {
     },
   },
   rules: {
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off",
     "no-console": "error",
     "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
     "react-hooks/exhaustive-deps": "error",

@@ -18,22 +18,34 @@ jobs:
         with:
           node-version: "16" # Or whatever version you want to specify
 
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.yarn
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
       - name: Install Dependencies
-        run: npm ci
+        run: yarn install --frozen-lockfile
 
       # Check if the version has been incremented
-      # - name: Check if the version has been incremented
-      #   run: |
-      #     git fetch
-      #     VERSION_CHANGED=$(git diff origin/main -- package.json | grep '"version":')
-      #     if [ -z "$VERSION_CHANGED" ]; then
-      #       echo "Error: version in package.json has not been incremented."
-      #       exit 1
-      #     fi
+      - name: Check if the version has been incremented
+        run: |
+          git fetch
+          VERSION_CHANGED=$(git diff origin/main -- package.json | grep '"version":')
+          if [ -z "$VERSION_CHANGED" ]; then
+            echo "Error: version in package.json has not been incremented."
+            exit 1
+          fi
+
+      # Add this step to run your tests
+      - name: Run Tests
+        run: yarn test
 
       # Build your project
       - name: Build
-        run: npm run build
+        run: yarn run build
 
       - name: Zip dist folder
         run: |

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "FocusGuardian",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Guard your focus! FocusGuardian helps you block distracting sites so you can remain concentrated on what matters most.",
   "action": {
     "default_popup": "index.html"

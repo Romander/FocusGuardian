@@ -1,8 +1,9 @@
 import {
   addSiteToBlockListType,
   deleteSiteFromBlockListType,
-  disableAllType,
+  updateSettingsType,
 } from "./constants";
+import { LangType } from "./types/lang";
 
 export type RequestChromeContentListener = {
   message: "show_overlay" | undefined;
@@ -11,11 +12,16 @@ export type RequestChromeContentListener = {
 type MessageType =
   | typeof addSiteToBlockListType
   | typeof deleteSiteFromBlockListType
-  | typeof disableAllType;
+  | typeof updateSettingsType;
 
 export type BlockedSite = { url: string; hostname: string; tabId: number };
 
-export type Settings = { disableAll: boolean };
+export type Settings = {
+  blockedDays: string[];
+  timeTo: string;
+  timeFrom: string;
+  langCode: LangType;
+};
 
 export type AddMessage = {
   type: MessageType;
@@ -27,7 +33,7 @@ export type DeleteMessage = {
   site: BlockedSite;
 };
 
-export type DisableAllChangeMessage = {
+export type SettingsChangeMessage = {
   type: MessageType;
-  value: boolean;
+  value: Settings;
 };
