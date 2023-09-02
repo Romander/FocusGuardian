@@ -24,7 +24,7 @@ const resources = {
 
 use(initReactI18next).use(LanguageDetector).init({
   resources,
-  fallbackLng: "en",
+  lng: "en",
 });
 
 export default i18n;

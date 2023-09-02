@@ -113,7 +113,7 @@ const Overlay = () => {
 
   useEffect(() => {
     const today = new Date().getDay().toString();
-    const isTodayBlocked = settings.blockedDays.includes(today);
+    const isTodayBlocked = settings.blockedDays?.includes(today);
     const siteIsBlocked = blockedSites.some(
       (x) => x.hostname === getHostnameFromUrl(location.href),
     );

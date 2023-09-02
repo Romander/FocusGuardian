@@ -104,7 +104,11 @@ const App = () => {
   );
 
   const handleSetTimeTo = useCallback(
-    async (timeTo: string) => {
+    async (timeTo: string | null) => {
+      if (timeTo === null) {
+        return;
+      }
+
       updateSettingsInStorage(
         {
           timeTo,
@@ -120,7 +124,11 @@ const App = () => {
   );
 
   const handleSetTimeFrom = useCallback(
-    async (timeFrom: string) => {
+    async (timeFrom: string | null) => {
+      if (timeFrom === null) {
+        return;
+      }
+
       updateSettingsInStorage(
         {
           timeFrom,
@@ -210,17 +218,17 @@ const App = () => {
       )}
 
       <WeekdayPicker
-        selectedDays={settings.blockedDays}
+        selectedDays={settings.blockedDays || []}
         onChange={handleDaysChange}
       />
 
       <div className="flex">
         <TimePicker
-          value={utcToLocalTime(settings.timeFrom)}
+          value={utcToLocalTime(settings.timeFrom) || ""}
           onChange={(e) => handleSetTimeFrom(localToUTCTime(e.target.value))}
         />
         <TimePicker
-          value={utcToLocalTime(settings.timeTo)}
+          value={utcToLocalTime(settings.timeTo) || ""}
           onChange={(e) => handleSetTimeTo(localToUTCTime(e.target.value))}
         />
       </div>
