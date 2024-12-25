@@ -88,7 +88,10 @@ const Overlay = () => {
           }));
 
           if (newSettings.langCode) {
-            i18n.changeLanguage(newSettings.langCode);
+            i18n.changeLanguage(newSettings.langCode).catch((error) => {
+              // eslint-disable-next-line no-console
+              console.error("Error changing language:", error);
+            });
           }
 
           break;
@@ -103,7 +106,6 @@ const Overlay = () => {
     return () => {
       chrome.runtime.onMessage.removeListener(onMessage);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -179,7 +181,6 @@ const Overlay = () => {
       window.removeEventListener("focus", handleTabChange);
       window.removeEventListener("visibilitychange", handleTabChange);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings.timeFrom, settings.timeTo]);
 
   if (!showOverlay) {

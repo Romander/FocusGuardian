@@ -7,10 +7,8 @@ import i18n from "./i18n";
 import "./index.css";
 
 const container = document.getElementById("root") as HTMLElement;
-container.className = "focus-guardian";
 
-const root = createRoot(container);
-root.render(
+createRoot(container).render(
   <StrictMode>
     <I18nextProvider i18n={i18n}>
       <App />

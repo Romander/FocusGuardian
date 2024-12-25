@@ -22,7 +22,7 @@ const resources = {
   },
 };
 
-use(initReactI18next).use(LanguageDetector).init({
+void use(initReactI18next).use(LanguageDetector).init({
   resources,
   lng: "en",
 });

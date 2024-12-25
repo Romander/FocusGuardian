@@ -76,13 +76,10 @@ const App = () => {
       if (confirm(t("App/handleRemoveSiteFromBlockList/confirm"))) {
         deleteSiteFromStorage(site, setBlockedSites);
 
-        await chrome.tabs.sendMessage(
-          site.tabId as number,
-          {
-            type: deleteSiteFromBlockListType,
-            site,
-          } as DeleteMessage,
-        );
+        await chrome.tabs.sendMessage(site.tabId, {
+          type: deleteSiteFromBlockListType,
+          site,
+        } as DeleteMessage);
       }
     },
     [t],
@@ -116,7 +113,7 @@ const App = () => {
         setSettings,
       );
 
-      sendNewSettingsToAllTabs({
+      await sendNewSettingsToAllTabs({
         timeTo,
       });
     },
@@ -136,7 +133,7 @@ const App = () => {
         setSettings,
       );
 
-      sendNewSettingsToAllTabs({
+      await sendNewSettingsToAllTabs({
         timeFrom,
       });
     },
@@ -152,7 +149,7 @@ const App = () => {
         setSettings,
       );
 
-      sendNewSettingsToAllTabs({
+      await sendNewSettingsToAllTabs({
         blockedDays: days,
       });
     },
@@ -168,7 +165,7 @@ const App = () => {
         setSettings,
       );
 
-      sendNewSettingsToAllTabs({
+      await sendNewSettingsToAllTabs({
         langCode,
       });
     },
@@ -183,7 +180,12 @@ const App = () => {
         </div>
         <Button
           title={t("App/Button/Block")}
-          onClick={handleAddSiteToBlockList}
+          onClick={() => {
+            handleAddSiteToBlockList().catch((error) => {
+              // eslint-disable-next-line no-console
+              console.error("Error adding site to block list:", error);
+            });
+          }}
         >
           🔒
         </Button>
@@ -201,9 +203,15 @@ const App = () => {
                 <div className="truncate">{site.hostname}</div>
                 <Button
                   title={t("App/Button/Unblock")}
-                  onClick={async () =>
-                    await handleRemoveSiteFromBlockList(site)
-                  }
+                  onClick={() => {
+                    handleRemoveSiteFromBlockList(site).catch((error) => {
+                      // eslint-disable-next-line no-console
+                      console.error(
+                        "Error removing site from block list:",
+                        error,
+                      );
+                    });
+                  }}
                 >
                   🔓
                 </Button>
@@ -219,23 +227,45 @@ const App = () => {
 
       <WeekdayPicker
         selectedDays={settings.blockedDays || []}
-        onChange={handleDaysChange}
+        onChange={(days) => {
+          handleDaysChange(days).catch((error) => {
+            // eslint-disable-next-line no-console
+            console.error("Error changing days:", error);
+          });
+        }}
       />
 
       <div className="flex">
         <TimePicker
           value={utcToLocalTime(settings.timeFrom) || ""}
-          onChange={(e) => handleSetTimeFrom(localToUTCTime(e.target.value))}
+          onChange={(e) => {
+            handleSetTimeFrom(localToUTCTime(e.target.value)).catch((error) => {
+              // eslint-disable-next-line no-console
+              console.error("Error changing time from:", error);
+            });
+          }}
         />
         <TimePicker
           value={utcToLocalTime(settings.timeTo) || ""}
-          onChange={(e) => handleSetTimeTo(localToUTCTime(e.target.value))}
+          onChange={(e) => {
+            handleSetTimeTo(localToUTCTime(e.target.value)).catch((error) => {
+              // eslint-disable-next-line no-console
+              console.error("Error changing time to:", error);
+            });
+          }}
         />
       </div>
 
       <footer className="flex flex-row items-center w-full">
         <div className="flex-[45%]">
-          <LanguageSwitcher onChange={handleChangeLang} />
+          <LanguageSwitcher
+            onChange={(langCode) => {
+              handleChangeLang(langCode).catch((error) => {
+                // eslint-disable-next-line no-console
+                console.error("Error changing language:", error);
+              });
+            }}
+          />
         </div>
         <div className="flex-[55%]">
           <a
@@ -243,7 +273,7 @@ const App = () => {
             target="_blank"
             rel="noreferrer"
           >
-            <img src={chrome.runtime.getURL(githubIcon)} alt="GitHub" />
+            <img src={githubIcon} alt="GitHub" />
           </a>
         </div>
       </footer>

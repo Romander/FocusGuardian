@@ -16,7 +16,6 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "typeRoots": ["./node_modules/@types"],
-    "types": ["jest", "node", "chrome"]
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
