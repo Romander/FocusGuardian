@@ -13,7 +13,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-    - name: Setup Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
           node-version: "23" # Or whatever version you want to specify
