@@ -1,0 +1,142 @@
+{
+  "lang_flag": {
+    "message": "🇹🇷",
+    "description": "Language emoji flag"
+  },
+  "language_switcher_title": {
+    "message": "Dili değiştir",
+    "description": "Language switcher title"
+  },
+  "weekday_sun": {
+    "message": "Paz",
+    "description": "Sunday abbreviated"
+  },
+  "weekday_mon": {
+    "message": "Pzt",
+    "description": "Monday abbreviated"
+  },
+  "weekday_tue": {
+    "message": "Sal",
+    "description": "Tuesday abbreviated"
+  },
+  "weekday_wed": {
+    "message": "Çar",
+    "description": "Wednesday abbreviated"
+  },
+  "weekday_thu": {
+    "message": "Per",
+    "description": "Thursday abbreviated"
+  },
+  "weekday_fri": {
+    "message": "Cum",
+    "description": "Friday abbreviated"
+  },
+  "weekday_sat": {
+    "message": "Cmt",
+    "description": "Saturday abbreviated"
+  },
+  "weekday_monday": {
+    "message": "Pazartesi",
+    "description": "Monday full name"
+  },
+  "weekday_tuesday": {
+    "message": "Salı",
+    "description": "Tuesday full name"
+  },
+  "weekday_wednesday": {
+    "message": "Çarşamba",
+    "description": "Wednesday full name"
+  },
+  "weekday_thursday": {
+    "message": "Perşembe",
+    "description": "Thursday full name"
+  },
+  "weekday_friday": {
+    "message": "Cuma",
+    "description": "Friday full name"
+  },
+  "weekday_saturday": {
+    "message": "Cumartesi",
+    "description": "Saturday full name"
+  },
+  "weekday_sunday": {
+    "message": "Pazar",
+    "description": "Sunday full name"
+  },
+  "app_button_block": {
+    "message": "Mevcut siteyi engelle",
+    "description": "Block button text"
+  },
+  "app_button_unblock": {
+    "message": "Siteyi engellemeyi kaldır",
+    "description": "Unblock button text"
+  },
+  "app_remove_site_confirm": {
+    "message": "Kendine sor: \"Bu sitenin engelini kaldırmak hedeflerime ulaşmama yardımcı olacak mı, yoksa bu sadece ilerlememin kaybına neden olacak geçici bir dikkat dağıtıcı mı?\"",
+    "description": "Confirmation message for removing site"
+  },
+  "app_list_empty": {
+    "message": "Merhaba, odak koruyucusu! 🌟\nŞu an tüm dünyalar sana açık.\nBurası FocusGuardian'ın korumasını istediğin dikkat dağıtıcı topraklar mı?",
+    "description": "Empty list message"
+  },
+  "quote_1": {
+    "message": "🧙‍♂️ \"Bizi gerçekte ne olduğumuzu gösteren yeteneklerimiz değil, seçimlerimizdir\" - Harry Potter ve Sırlar Odası, J.K. Rowling",
+    "description": "Quote from Harry Potter"
+  },
+  "quote_2": {
+    "message": "🍃 \"En küçük kişi bile geleceğin akışını değiştirebilir\" - Yüzüklerin Efendisi: Yüzük Kardeşliği, J.R.R. Tolkien",
+    "description": "Quote from Lord of the Rings"
+  },
+  "quote_3": {
+    "message": "🌌 \"Odaklandığınız şey gerçekliğinizi belirler\" - Yıldız Savaşları: Gizli Tehlike",
+    "description": "Quote from Star Wars"
+  },
+  "quote_4": {
+    "message": "🥋 \"Başarılı savaşçı, lazer gibi odaklanmış sıradan bir insandır\" - Bruce Lee",
+    "description": "Quote from Bruce Lee"
+  },
+  "quote_5": {
+    "message": "🕶️ \"Yolu bilmek ile yolda yürümek arasında fark vardır\" - Matrix",
+    "description": "Quote from The Matrix"
+  },
+  "quote_6": {
+    "message": "💡 \"Deha yüzde bir ilham ve yüzde doksan dokuz terdir\" - Thomas Edison",
+    "description": "Quote from Thomas Edison"
+  },
+  "quote_7": {
+    "message": "🔍 \"Aylar ve yıllar boyunca düşünürüm. Doksan dokuz kez sonuç yanlıştır\" - Albert Einstein",
+    "description": "Quote from Albert Einstein"
+  },
+  "quote_8": {
+    "message": "🗡️ \"Dikkatin dağınıkken gitmek tehlikelidir! Uyanık ol\" - Zelda'nın Efsanesi",
+    "description": "Quote from Legend of Zelda"
+  },
+  "quote_9": {
+    "message": "🌌 \"Yap ya da yapma. Denemek diye bir şey yoktur\" - Yoda, Yıldız Savaşları",
+    "description": "Quote from Star Wars"
+  },
+  "quote_10": {
+    "message": "🥊 \"Mesele ne kadar sert vurduğun değil. Mesele ne kadar sert darbe alıp ilerlemeye devam edebildiğindir\" - Rocky",
+    "description": "Quote from Rocky"
+  },
+  "quote_11": {
+    "message": "👀 \"Gerçekten önemli olana odaklan\" - Dalgın Erkek Arkadaş",
+    "description": "Quote from Distracted Boyfriend"
+  },
+  "quote_12": {
+    "message": "📈 \"Kendine yatırım yap\" - Stonks",
+    "description": "Quote from Stonks"
+  },
+  "quote_13": {
+    "message": "📝 \"Planla. Uygula. Başar\" - Gru'nun Planı",
+    "description": "Quote from Gru's Plan"
+  },
+  "quote_14": {
+    "message": "🐸 \"Hedeflerine ulaşmak güzel bir his\" - Pepe Kurbağa",
+    "description": "Quote from Pepe the Frog"
+  },
+  "quote_15": {
+    "message": "🎥 \"Sadece yap! Hayallerinin hayal olarak kalmasına izin verme\" - Shia LaBeouf",
+    "description": "Quote from Shia LaBeouf"
+  }
+}

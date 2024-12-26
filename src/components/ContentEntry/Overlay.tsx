@@ -26,17 +26,25 @@ import {
 const Overlay = () => {
   const { t, i18n } = useTranslation();
 
-  const quotes = useMemo(
-    () =>
-      t("quotes", { returnObjects: true }) as {
-        source: string;
-        text: string;
-      }[],
-    [t],
-  );
+  const quotes = useMemo(() => {
+    if (!i18n.isInitialized) {
+      return [];
+    }
+
+    const quoteEntries: { text: string }[] = [];
+    for (let i = 1; i <= 15; i++) {
+      const quote = t(`quote_${i}`);
+      if (quote && quote !== `quote_${i}`) {
+        // Check if translation exists
+        quoteEntries.push({
+          text: quote,
+        });
+      }
+    }
+    return quoteEntries;
+  }, [t, i18n.isInitialized]);
 
   const [quote, setQuote] = useState<{
-    source: string;
     text: string;
   } | null>(null);
   const [showOverlay, setShowOverlay] = useState<boolean>(false);
@@ -47,6 +55,16 @@ const Overlay = () => {
     langCode: i18n.language as LangType,
   });
   const [blockedSites, setBlockedSites] = useState<BlockedSite[]>([]);
+
+  useEffect(() => {
+    getSettingsFromStorage((newSettings) => {
+      setSettings(newSettings);
+      // Sync i18n language with stored settings
+      if (newSettings.langCode && newSettings.langCode !== i18n.language) {
+        void i18n.changeLanguage(newSettings.langCode);
+      }
+    });
+  }, [i18n]);
 
   useEffect(() => {
     const onMessage = (
@@ -81,19 +99,15 @@ const Overlay = () => {
           break;
         case updateSettingsType: {
           const newSettings = (message as SettingsChangeMessage).value;
-
           setSettings((prev) => ({
             ...prev,
             ...newSettings,
           }));
 
-          if (newSettings.langCode) {
-            i18n.changeLanguage(newSettings.langCode).catch((error) => {
-              // eslint-disable-next-line no-console
-              console.error("Error changing language:", error);
-            });
+          // Update language if it changed
+          if (newSettings.langCode && newSettings.langCode !== i18n.language) {
+            void i18n.changeLanguage(newSettings.langCode);
           }
-
           break;
         }
         default:
@@ -106,7 +120,7 @@ const Overlay = () => {
     return () => {
       chrome.runtime.onMessage.removeListener(onMessage);
     };
-  }, []);
+  }, [i18n]);
 
   useEffect(() => {
     getSitesFromStorage(setBlockedSites);
@@ -193,7 +207,6 @@ const Overlay = () => {
         {quote && (
           <div className="mt-4">
             <p className="italic">{quote.text}</p>
-            <p className="mt-2 text-xl">- {quote.source}</p>
           </div>
         )}
       </div>

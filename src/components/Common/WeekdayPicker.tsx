@@ -12,39 +12,39 @@ const WeekdayPicker: React.FC<WeekdayPickerProps> = (props) => {
   const days = useMemo(
     () => [
       {
-        label: t("WeekdayPicker/sun"),
+        label: t("weekday_sun"),
         value: "0",
-        title: t("WeekdayPicker/sunday"),
+        title: t("weekday_sunday"),
       },
       {
-        label: t("WeekdayPicker/mon"),
+        label: t("weekday_mon"),
         value: "1",
-        title: t("WeekdayPicker/monday"),
+        title: t("weekday_monday"),
       },
       {
-        label: t("WeekdayPicker/tue"),
+        label: t("weekday_tue"),
         value: "2",
-        title: t("WeekdayPicker/tuesday"),
+        title: t("weekday_tuesday"),
       },
       {
-        label: t("WeekdayPicker/wed"),
+        label: t("weekday_wed"),
         value: "3",
-        title: t("WeekdayPicker/wednesday"),
+        title: t("weekday_wednesday"),
       },
       {
-        label: t("WeekdayPicker/thu"),
+        label: t("weekday_thu"),
         value: "4",
-        title: t("WeekdayPicker/thursday"),
+        title: t("weekday_thursday"),
       },
       {
-        label: t("WeekdayPicker/fri"),
+        label: t("weekday_fri"),
         value: "5",
-        title: t("WeekdayPicker/friday"),
+        title: t("weekday_friday"),
       },
       {
-        label: t("WeekdayPicker/sat"),
+        label: t("weekday_sat"),
         value: "6",
-        title: t("WeekdayPicker/saturday"),
+        title: t("weekday_saturday"),
       },
     ],
     [t],
