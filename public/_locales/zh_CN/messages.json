@@ -1,0 +1,82 @@
+{
+  "lang_flag": {
+    "message": "🇨🇳",
+    "description": "语言表情旗帜"
+  },
+  "language_switcher_title": {
+    "message": "切换语言",
+    "description": "语言切换器标题"
+  },
+  "weekday_sun": {
+    "message": "日",
+    "description": "星期日缩写"
+  },
+  "weekday_mon": {
+    "message": "一",
+    "description": "星期一缩写"
+  },
+  "weekday_tue": {
+    "message": "二",
+    "description": "星期二缩写"
+  },
+  "weekday_wed": {
+    "message": "三",
+    "description": "星期三缩写"
+  },
+  "weekday_thu": {
+    "message": "四",
+    "description": "星期四缩写"
+  },
+  "weekday_fri": {
+    "message": "五",
+    "description": "星期五缩写"
+  },
+  "weekday_sat": {
+    "message": "六",
+    "description": "星期六缩写"
+  },
+  "weekday_sunday": {
+    "message": "星期日",
+    "description": "星期日全名"
+  },
+  "weekday_monday": {
+    "message": "星期一",
+    "description": "星期一全名"
+  },
+  "weekday_tuesday": {
+    "message": "星期二",
+    "description": "星期二全名"
+  },
+  "weekday_wednesday": {
+    "message": "星期三",
+    "description": "星期三全名"
+  },
+  "weekday_thursday": {
+    "message": "星期四",
+    "description": "星期四全名"
+  },
+  "weekday_friday": {
+    "message": "星期五",
+    "description": "星期五全名"
+  },
+  "weekday_saturday": {
+    "message": "星期六",
+    "description": "星期六全名"
+  },
+  "app_button_block": {
+    "message": "屏蔽当前网站",
+    "description": "屏蔽按钮文本"
+  },
+  "app_button_unblock": {
+    "message": "解除屏蔽",
+    "description": "解除屏蔽按钮文本"
+  },
+  "app_remove_site_confirm": {
+    "message": "问问自己：\"解除屏蔽这个网站是否能帮助我更接近目标，还是只是一个会让我失去进度的短暂干扰？\"",
+    "description": "删除网站的确认消息"
+  },
+  "app_list_empty": {
+    "message": "你好，专注守护者！🌟\n目前所有世界都向你开放。\n这是你想要FocusGuardian保护的分心之地吗？",
+    "description": "空列表消息"
+  }
+} 
