@@ -1,88 +1,142 @@
 {
-  "lang": "🇬🇧",
-
-  "LanguageSwitcher_title": "Change language",
-
-  "WeekdayPicker_sun": "Sun",
-  "WeekdayPicker_mon": "Mon",
-  "WeekdayPicker_tue": "Tue",
-  "WeekdayPicker_wed": "Wed",
-  "WeekdayPicker_thu": "Thu",
-  "WeekdayPicker_fri": "Fri",
-  "WeekdayPicker_sat": "Sat",
-  "WeekdayPicker_monday": "Monday",
-  "WeekdayPicker_tuesday": "Tuesday",
-  "WeekdayPicker_wednesday": "Wednesday",
-  "WeekdayPicker_thursday": "Thursday",
-  "WeekdayPicker_friday": "Friday",
-  "WeekdayPicker_saturday": "Saturday",
-  "WeekdayPicker_sunday": "Sunday",
-
-  "App_Button_Block": "Block current site",
-  "App_Button_Unblock": "Unblock site",
-  "App_handleRemoveSiteFromBlockList_confirm": "Ask yourself: \"Is unblocking this site helping me get closer to my goals, or is it merely a momentary distraction that will cost me progress?\"",
-  "App_list_empty": "Greetings, champion of focus! 🌟\nAll realms are open to you for now.\nIs this a land of distraction you wish the FocusGuardian to guard against?",
-
-  "quotes": [
-    {
-      "source": "Harry Potter and the Chamber of Secrets, J.K. Rowling",
-      "text": "🧙‍♂️ 'It is our choices that show what we truly are, far more than our abilities.'"
-    },
-    {
-      "source": "The Fellowship of the Ring, J.R.R. Tolkien",
-      "text": "🍃 'Even the smallest person can change the course of the future.'"
-    },
-    {
-      "source": "Star Wars: The Phantom Menace",
-      "text": "🌌 'Your focus determines your reality.'"
-    },
-    {
-      "source": "Bruce Lee",
-      "text": "🥋 'The successful warrior is the average man, with laser-like focus.'"
-    },
-    {
-      "source": "The Matrix",
-      "text": "🕶️ 'There's a difference between knowing the path and walking the path.'"
-    },
-    {
-      "source": "Thomas Edison",
-      "text": "💡 'Genius is one percent inspiration and ninety-nine percent perspiration.'"
-    },
-    {
-      "source": "Albert Einstein",
-      "text": "🔍 'I think and think for months and years. The hundredth time I am right.'"
-    },
-    {
-      "source": "The Legend of Zelda",
-      "text": "🗡️ 'It's dangerous to go distracted! Stay sharp.'"
-    },
-    {
-      "source": "Yoda, Star Wars",
-      "text": "🌌 'Do or do not, there is no try.'"
-    },
-    {
-      "source": "Rocky",
-      "text": "🥊 'It ain’t about how hard you hit. It’s about how hard you can get hit and keep moving forward.'"
-    },
-    {
-      "source": "Distracted Boyfriend",
-      "text": "👀 'Focus on what truly matters.'"
-    },
-    {
-      "source": "Stonks",
-      "text": "📈 'Invest in yourself.'"
-    },
-    {
-      "source": "Gru's Plan",
-      "text": "📝 'Plan. Execute. Achieve.'"
-    },
-    {
-      "source": "Pepe the Frog",
-      "text": "🐸 'Feels good man, to accomplish your goals.'"
-    },
-    {
-      "source": "Shia LaBeouf",
-      "text": "🎥 'Just Do It! Don't let your dreams be dreams.'"
-    }
-  ]
+  "lang_flag": {
+    "message": "🇬🇧",
+    "description": "Language emoji flag"
+  },
+  "language_switcher_title": {
+    "message": "Change language",
+    "description": "Language switcher title"
+  },
+  "weekday_sun": {
+    "message": "Sun",
+    "description": "Sunday abbreviated"
+  },
+  "weekday_mon": {
+    "message": "Mon",
+    "description": "Monday abbreviated"
+  },
+  "weekday_tue": {
+    "message": "Tue",
+    "description": "Tuesday abbreviated"
+  },
+  "weekday_wed": {
+    "message": "Wed",
+    "description": "Wednesday abbreviated"
+  },
+  "weekday_thu": {
+    "message": "Thu",
+    "description": "Thursday abbreviated"
+  },
+  "weekday_fri": {
+    "message": "Fri",
+    "description": "Friday abbreviated"
+  },
+  "weekday_sat": {
+    "message": "Sat",
+    "description": "Saturday abbreviated"
+  },
+  "weekday_monday": {
+    "message": "Monday",
+    "description": "Monday full name"
+  },
+  "weekday_tuesday": {
+    "message": "Tuesday",
+    "description": "Tuesday full name"
+  },
+  "weekday_wednesday": {
+    "message": "Wednesday",
+    "description": "Wednesday full name"
+  },
+  "weekday_thursday": {
+    "message": "Thursday",
+    "description": "Thursday full name"
+  },
+  "weekday_friday": {
+    "message": "Friday",
+    "description": "Friday full name"
+  },
+  "weekday_saturday": {
+    "message": "Saturday",
+    "description": "Saturday full name"
+  },
+  "weekday_sunday": {
+    "message": "Sunday",
+    "description": "Sunday full name"
+  },
+  "app_button_block": {
+    "message": "Block current site",
+    "description": "Block button text"
+  },
+  "app_button_unblock": {
+    "message": "Unblock site",
+    "description": "Unblock button text"
+  },
+  "app_remove_site_confirm": {
+    "message": "Ask yourself: \"Does unblocking this site help me get closer to my goals, or is it just a momentary distraction that will cost me lost progress?\"",
+    "description": "Confirmation message for removing site"
+  },
+  "app_list_empty": {
+    "message": "Hello, focus guardian! 🌟\nAll worlds are open to you for now.\nIs this the land of distraction you want FocusGuardian to protect?",
+    "description": "Empty list message"
+  },
+  "quote_1": {
+    "message": "🧙‍♂️ \"It is our choices that show what we truly are, far more than our abilities\" - Harry Potter and the Chamber of Secrets, J.K. Rowling",
+    "description": "Quote from Harry Potter"
+  },
+  "quote_2": {
+    "message": "🍃 \"Even the smallest person can change the course of the future\" - The Fellowship of the Ring, J.R.R. Tolkien",
+    "description": "Quote from Lord of the Rings"
+  },
+  "quote_3": {
+    "message": "🌌 \"Your focus determines your reality\" - Star Wars: The Phantom Menace",
+    "description": "Quote from Star Wars"
+  },
+  "quote_4": {
+    "message": "🥋 \"The successful warrior is the average person with laser-like focus\" - Bruce Lee",
+    "description": "Quote from Bruce Lee"
+  },
+  "quote_5": {
+    "message": "🕶️ \"There's a difference between knowing the path and walking the path\" - The Matrix",
+    "description": "Quote from The Matrix"
+  },
+  "quote_6": {
+    "message": "💡 \"Genius is one percent inspiration and ninety-nine percent perspiration\" - Thomas Edison",
+    "description": "Quote from Thomas Edison"
+  },
+  "quote_7": {
+    "message": "🔍 \"I think and think for months and years. Ninety-nine times, the conclusion is false\" - Albert Einstein",
+    "description": "Quote from Albert Einstein"
+  },
+  "quote_8": {
+    "message": "🗡️ \"It's dangerous to go distracted! Stay sharp\" - Legend of Zelda",
+    "description": "Quote from Legend of Zelda"
+  },
+  "quote_9": {
+    "message": "🌌 \"Do. Or do not. There is no try\" - Yoda, Star Wars",
+    "description": "Quote from Star Wars"
+  },
+  "quote_10": {
+    "message": "🥊 \"It ain't about how hard you hit. It's about how hard you can get hit and keep moving forward\" - Rocky",
+    "description": "Quote from Rocky"
+  },
+  "quote_11": {
+    "message": "👀 \"Focus on what truly matters\" - Distracted Boyfriend",
+    "description": "Quote from Distracted Boyfriend"
+  },
+  "quote_12": {
+    "message": "📈 \"Invest in yourself\" - Stonks",
+    "description": "Quote from Stonks"
+  },
+  "quote_13": {
+    "message": "📝 \"Plan. Execute. Achieve\" - Gru's Plan",
+    "description": "Quote from Gru's Plan"
+  },
+  "quote_14": {
+    "message": "🐸 \"Feels good to achieve your goals\" - Pepe the Frog",
+    "description": "Quote from Pepe the Frog"
+  },
+  "quote_15": {
+    "message": "🎥 \"Just do it! Don't let your dreams be dreams\" - Shia LaBeouf",
+    "description": "Quote from Shia LaBeouf"
+  }
 }

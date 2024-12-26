@@ -17,17 +17,14 @@ const LanguageSwitcher: React.FC<LanguageSwitcher> = (props) => {
     const nextIndex = (currentIndex + 1) % LANGUAGES.length;
     const nextLanguage = LANGUAGES[nextIndex];
 
-    i18n.changeLanguage(nextLanguage).catch((error) => {
-      // eslint-disable-next-line no-console
-      console.error("Error changing language:", error);
+    void i18n.changeLanguage(nextLanguage).then(() => {
+      onChange(nextLanguage);
     });
-
-    onChange(nextLanguage);
   }, [i18n, onChange]);
 
   return (
-    <Button title={t("LanguageSwitcher_title")} onClick={switchLanguage}>
-      {t("lang")}
+    <Button title={t("language_switcher_title")} onClick={switchLanguage}>
+      {t("lang_flag")}
     </Button>
   );
 };

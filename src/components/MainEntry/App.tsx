@@ -46,11 +46,20 @@ const App = () => {
 
   useEffect(() => {
     getSitesFromStorage(setBlockedSites);
-    getSettingsFromStorage(setSettings);
+    getSettingsFromStorage((newSettings) => {
+      setSettings(newSettings);
+      // Sync i18n language with stored settings
+      if (newSettings.langCode && newSettings.langCode !== i18n.language) {
+        i18n.changeLanguage(newSettings.langCode).catch((error) => {
+          // eslint-disable-next-line no-console
+          console.error("Error changing language:", error);
+        });
+      }
+    });
     getCurrentTab((tab) => {
       setTab(tab);
     });
-  }, []);
+  }, [i18n]);
 
   const handleAddSiteToBlockList = useCallback(async () => {
     const url = tab?.url?.toString() ?? "";
@@ -73,7 +82,7 @@ const App = () => {
 
   const handleRemoveSiteFromBlockList = useCallback(
     async (site: BlockedSite) => {
-      if (confirm(t("App_handleRemoveSiteFromBlockList_confirm"))) {
+      if (confirm(t("app_remove_site_confirm"))) {
         deleteSiteFromStorage(site, setBlockedSites);
 
         await chrome.tabs.sendMessage(site.tabId, {
@@ -179,7 +188,7 @@ const App = () => {
           {tab?.url}
         </div>
         <Button
-          title={t("App_Button_Block")}
+          title={t("app_button_block")}
           onClick={() => {
             handleAddSiteToBlockList().catch((error) => {
               // eslint-disable-next-line no-console
@@ -202,7 +211,7 @@ const App = () => {
               >
                 <div className="truncate">{site.hostname}</div>
                 <Button
-                  title={t("App_Button_Unblock")}
+                  title={t("app_button_unblock")}
                   onClick={() => {
                     handleRemoveSiteFromBlockList(site).catch((error) => {
                       // eslint-disable-next-line no-console
@@ -221,7 +230,7 @@ const App = () => {
         </div>
       ) : (
         <div className="flex flex-col flex-1 items-center justify-center w-full h-full text-center leading-loose whitespace-pre-line">
-          {t("App_list_empty")}
+          {t("app_list_empty")}
         </div>
       )}
 
