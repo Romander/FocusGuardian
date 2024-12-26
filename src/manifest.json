@@ -19,6 +19,7 @@
       "matches": ["http://*/*", "https://*/*"]
     }
   ],
+  "default_locale": "en",
   "permissions": ["tabs", "storage"],
   "name": "FocusGuardian",
   "version": "1.2.0",

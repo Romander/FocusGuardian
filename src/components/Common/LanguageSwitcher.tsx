@@ -26,7 +26,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcher> = (props) => {
   }, [i18n, onChange]);
 
   return (
-    <Button title={t("LanguageSwitcher/title")} onClick={switchLanguage}>
+    <Button title={t("LanguageSwitcher_title")} onClick={switchLanguage}>
       {t("lang")}
     </Button>
   );
