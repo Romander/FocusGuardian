@@ -1,0 +1,82 @@
+{
+  "lang_flag": {
+    "message": "🇩🇪",
+    "description": "Sprache Emoji-Flagge"
+  },
+  "language_switcher_title": {
+    "message": "Sprache ändern",
+    "description": "Sprachumschalter Titel"
+  },
+  "weekday_sun": {
+    "message": "So",
+    "description": "Sonntag abgekürzt"
+  },
+  "weekday_mon": {
+    "message": "Mo",
+    "description": "Montag abgekürzt"
+  },
+  "weekday_tue": {
+    "message": "Di",
+    "description": "Dienstag abgekürzt"
+  },
+  "weekday_wed": {
+    "message": "Mi",
+    "description": "Mittwoch abgekürzt"
+  },
+  "weekday_thu": {
+    "message": "Do",
+    "description": "Donnerstag abgekürzt"
+  },
+  "weekday_fri": {
+    "message": "Fr",
+    "description": "Freitag abgekürzt"
+  },
+  "weekday_sat": {
+    "message": "Sa",
+    "description": "Samstag abgekürzt"
+  },
+  "weekday_sunday": {
+    "message": "Sonntag",
+    "description": "Sonntag vollständiger Name"
+  },
+  "weekday_monday": {
+    "message": "Montag",
+    "description": "Montag vollständiger Name"
+  },
+  "weekday_tuesday": {
+    "message": "Dienstag",
+    "description": "Dienstag vollständiger Name"
+  },
+  "weekday_wednesday": {
+    "message": "Mittwoch",
+    "description": "Mittwoch vollständiger Name"
+  },
+  "weekday_thursday": {
+    "message": "Donnerstag",
+    "description": "Donnerstag vollständiger Name"
+  },
+  "weekday_friday": {
+    "message": "Freitag",
+    "description": "Freitag vollständiger Name"
+  },
+  "weekday_saturday": {
+    "message": "Samstag",
+    "description": "Samstag vollständiger Name"
+  },
+  "app_button_block": {
+    "message": "Aktuelle Seite blockieren",
+    "description": "Blockieren Button Text"
+  },
+  "app_button_unblock": {
+    "message": "Seite freigeben",
+    "description": "Freigeben Button Text"
+  },
+  "app_remove_site_confirm": {
+    "message": "Fragen Sie sich: \"Hilft mir das Entsperren dieser Seite dabei, meine Ziele zu erreichen, oder ist es nur eine momentane Ablenkung, die mich Fortschritte kostet?\"",
+    "description": "Bestätigungsnachricht zum Entfernen der Seite"
+  },
+  "app_list_empty": {
+    "message": "Hallo, Fokus-Wächter! 🌟\nAlle Welten stehen dir momentan offen.\nIst dies das Land der Ablenkung, das FocusGuardian beschützen soll?",
+    "description": "Leere Liste Nachricht"
+  }
+} 

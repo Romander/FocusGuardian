@@ -1,0 +1,82 @@
+{
+  "lang_flag": {
+    "message": "🇫🇷",
+    "description": "Drapeau emoji de la langue"
+  },
+  "language_switcher_title": {
+    "message": "Changer de langue",
+    "description": "Titre du sélecteur de langue"
+  },
+  "weekday_sun": {
+    "message": "Dim",
+    "description": "Dimanche abrégé"
+  },
+  "weekday_mon": {
+    "message": "Lun",
+    "description": "Lundi abrégé"
+  },
+  "weekday_tue": {
+    "message": "Mar",
+    "description": "Mardi abrégé"
+  },
+  "weekday_wed": {
+    "message": "Mer",
+    "description": "Mercredi abrégé"
+  },
+  "weekday_thu": {
+    "message": "Jeu",
+    "description": "Jeudi abrégé"
+  },
+  "weekday_fri": {
+    "message": "Ven",
+    "description": "Vendredi abrégé"
+  },
+  "weekday_sat": {
+    "message": "Sam",
+    "description": "Samedi abrégé"
+  },
+  "weekday_sunday": {
+    "message": "Dimanche",
+    "description": "Dimanche nom complet"
+  },
+  "weekday_monday": {
+    "message": "Lundi",
+    "description": "Lundi nom complet"
+  },
+  "weekday_tuesday": {
+    "message": "Mardi",
+    "description": "Mardi nom complet"
+  },
+  "weekday_wednesday": {
+    "message": "Mercredi",
+    "description": "Mercredi nom complet"
+  },
+  "weekday_thursday": {
+    "message": "Jeudi",
+    "description": "Jeudi nom complet"
+  },
+  "weekday_friday": {
+    "message": "Vendredi",
+    "description": "Vendredi nom complet"
+  },
+  "weekday_saturday": {
+    "message": "Samedi",
+    "description": "Samedi nom complet"
+  },
+  "app_button_block": {
+    "message": "Bloquer le site actuel",
+    "description": "Texte du bouton de blocage"
+  },
+  "app_button_unblock": {
+    "message": "Débloquer le site",
+    "description": "Texte du bouton de déblocage"
+  },
+  "app_remove_site_confirm": {
+    "message": "Demandez-vous : \"Est-ce que débloquer ce site m'aide à atteindre mes objectifs, ou est-ce juste une distraction momentanée qui me coûtera des progrès ?\"",
+    "description": "Message de confirmation pour la suppression du site"
+  },
+  "app_list_empty": {
+    "message": "Bonjour, gardien de la concentration ! 🌟\nTous les mondes vous sont ouverts pour l'instant.\nEst-ce la terre de distraction que vous voulez que FocusGuardian protège ?",
+    "description": "Message de liste vide"
+  }
+} 
